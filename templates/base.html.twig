@@ -1,52 +1,47 @@
 <!DOCTYPE html>
 <html>
-
-    
-=======
 	<head>
-		<meta charset="UTF-8">
 		<title>
 			{% block title %}Welcome!
 			{% endblock %}
 		</title>
+    		<meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="{{ asset(logo) }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script src="https://cdn.tailwindcss.com"></script>
 
-		{% block javascripts %}
-			{% block importmap %}
-				{{ importmap('app') }}
-			{% endblock %}
-		{% endblock %}
+{% block javascripts %}
+    {{ importmap('app') }}
+{% endblock %}
 	</head>
 	<body>
 
-		<nav class="bg-black border-gray-200">
+		<nav class="border-gray-200">
 			<div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-				<a class="flex items-center space-x-3 rtl:space-x-reverse">
-					<img src="{{ asset(logo) }}" class="h-8" alt="Flowbite Logo"/>
-					<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Lumify</span>
+				<a class="flex items-center space-x-3">
+					<img src="{{ asset(logo) }}" class="h-8" alt="Lumify Logo"/>
+					<span class="self-center text-2xl font-bold whitespace-nowrap text-white">Lumify</span>
 				</a>
 				<button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
 					<span class="sr-only">Ouvrir le menu</span>
-					<img src="{{ asset('assets/img/logo.svg') }}" class="w-5 h-5" alt="Lumify"/>
+					<img src="{{ asset(logo) }}" class="w-5 h-5" alt="Lumify Logo"/>
 				</button>
 				<div class="hidden w-full md:block md:w-auto">
 					<ul class="font-medium flex flex-col p-4 md:p-0 mt-4 md:flex-row md:space-x-8 md:mt-0">
 						<li>
-							<a href="/" class="block py-2 px-3 text-white bg-rose-700 rounded md:bg-transparent md:text-rose-700 md:p-0 dark:text-white md:dark:text-rose-500 transition-all" aria-current="page">Accueil</a>
+							<a href="/" class="block py-2 px-3 text-white text-rose-700 md:p-0	dark:text-rose-500 transition-all" aria-current="page">Accueil</a>
 						</li>
 						<li>
-							<a href="/404" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-700 md:p-0 dark:text-white md:dark:hover:text-rose-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent transition-all">Publications</a>
+							<a href="/404" class="block py-2 px-3 hover:text-rose-500 md:p-0 text-white transition-all">Publications</a>
 						</li>
 						<li>
-							<a href="/404" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-700 md:p-0 dark:text-white md:dark:hover:text-rose-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent transition-all">Profil</a>
+							<a href="/404" class="block py-2 px-3 hover:text-rose-500 md:p-0 text-white transition-all">Profil</a>
 						</li>
 						<li>
-							<a href="/404" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-700 md:p-0 dark:text-white md:dark:hover:text-rose-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent transition-all">S'inscrire</a>
+							<a href="/404" class="block py-2 px-3 hover:text-rose-500 md:p-0 text-white transition-all">S'inscrire</a>
 						</li>
 						<li>
-							<a href="/404" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-rose-700 md:p-0 dark:text-white md:dark:hover:text-rose-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent transition-all">Se connecter</a>
+							<a href="/404" class="block py-2 px-3 hover:text-rose-500 md:p-0 text-white transition-all">Se connecter</a>
 						</li>
 					</ul>
 				</div>
