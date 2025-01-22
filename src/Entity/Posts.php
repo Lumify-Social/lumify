@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PostsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -27,17 +29,27 @@ class Posts
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comments::class, cascade: ['remove'])]
+    private Collection $comments;
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+        $this->created_at = $this->created_at ?? new \DateTimeImmutable();
+        $this->updated_at = $this->updated_at ?? new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUser(): ?users
+    public function getUser(): ?Users
     {
         return $this->user;
     }
 
-    public function setUser(?users $user): static
+    public function setUser(?Users $user): static
     {
         $this->user = $user;
 
@@ -79,4 +91,36 @@ class Posts
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Comments>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comments $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comments $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // Set the owning side to null (unless already changed)
+            if ($comment->getPost() === $this) {
+                $comment->setPost(null);
+            }
+        }
+
+        return $this;
+    }
 }
+
+

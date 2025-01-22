@@ -1,13 +1,39 @@
+{% extends 'base.html.twig' %}
 
+{% block title %}Toutes les publications{% endblock %}
 
-<h1>Toutes les publications</h1>
+{% block body %}
+    <div class="bg-gradient-to-br from-black via-red-900 to-gray-900 text-gray-200 min-h-screen">
+        <div class="max-w-2xl mx-auto py-12 px-6">
+            <h1 class="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-red-500 via-black-500 to-indigo-500 bg-clip-text text-transparent ">
+                Toutes les publications
+            </h1>
 
-{% for post in posts %}
-    <div>
-        <p><strong>{{ post.user.username }}</strong></p>
-        <p>{{ post.content }}</p>
-        <p><em>Publié le {{ post.createdAt|date('d/m/Y H:i') }}</em></p>
+            {% for post in posts %}
+                <div class="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 mb-6">
+                    <p class="font-semibold text-lg text-red-400">{{ post.user.username }}</p>
+                    <p class="mt-2 text-gray-300">
+                        {{ post.content }}
+                    </p>
+                    <p class="text-sm text-gray-500 mt-4">
+                        <em>Publié le {{ post.createdAt|date('d/m/Y H:i') }}</em>
+                    </p>
+                    <a href="{{ path('posts_show', { id: post.id }) }}" class="text-red-400 hover:underline">
+                        Voir les commentaires
+                    </a>
+                </div>
+            {% else %}
+                <p class="text-center text-gray-400 italic">
+                    Aucune publication à afficher
+                </p>
+            {% endfor %}
+            <div class="text-center mt-8">
+                <a href="{{ path('posts_create') }}" class="px-6 py-3 bg-gradient-to-r from-red-500 to-black-600 text-white font-semibold rounded-lg hover:from-pink-600 hover:to-black-700 transition-all duration-300">
+                    Créer une publication
+                </a>
+            </div>
+        </div>
     </div>
-{% else %}
-    <p>Aucune publication à afficher.</p>
-{% endfor %}
+{% endblock %}
+
+
