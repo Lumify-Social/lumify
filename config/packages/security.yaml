@@ -1,39 +1,46 @@
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    # Configuration des encodeurs de mots de passe
     password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+        App\Entity\Users:
+            algorithm: bcrypt
+
+    # Configuration du provider (qui utilise l'entité User)
     providers:
-        users_in_memory: { memory: null }
+        app_user_provider:
+            entity:
+                class: App\Entity\Users
+                property: email  # Utilise l'email comme identifiant unique
+
+    # Configuration des firewalls pour la sécurité des pages
     firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+        # Firewall principal avec la gestion de la connexion via un formulaire
         main:
-            lazy: true
-            provider: users_in_memory
+            # Désactive la sécurité pour certaines pages (exemple : pages d'inscription, de login)
+            pattern: ^/(login|register)$
+            security: false
+             
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true 
+                default_target_path: home  # Page après connexion réussie
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
+            # Déconnexion et invalidation de session
+            logout:
+                path: /logout  # Symfony gère cette route automatiquement
+                target: /login # Redirection après déconnexion
+                invalidate_session: true  # Invalider la session après déconnexion
+            custom_authenticator:
+                - App\Security\UsersAuthenticator
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+                always_remember_me: true  # Toujours activer l'option "se souvenir de moi"
 
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
+    # Définition des accès contrôlés (qui peut accéder à quelles pages)
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-
-when@test:
-    security:
-        password_hashers:
-            # By default, password hashers are resource intensive and take time. This is
-            # important to generate secure password hashes. In tests however, secure hashes
-            # are not important, waste resources and increase test times. The following
-            # reduces the work factor to the lowest possible values.
-            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-                algorithm: auto
-                cost: 4 # Lowest possible value for bcrypt
-                time_cost: 3 # Lowest possible value for argon
-                memory_cost: 10 # Lowest possible value for argon
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: ROLE_USER }
