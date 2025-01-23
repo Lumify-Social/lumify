@@ -3,33 +3,24 @@
 namespace App\Entity;
 
 use App\Repository\UsersRepository;
-
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
-
-#[ORM\Entity(repositoryClass: UsersRepository::class)]
-class Users
-=======
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
 #[Broadcast]
-#[UniqueEntity(fields: ['email'], message: 'Il y a déja un compte abec cette adresse email')]
+#[UniqueEntity(fields: ['email'], message: 'Il y a déjà un compte avec cette adresse email')]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
-
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-
-
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -38,10 +29,10 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $username = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $profile_picture = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $bio = null;
 
     #[ORM\Column]
@@ -52,9 +43,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
-=======
-    #[ORM\Column(length: 255, unique: true)]
-    private ?string $email = null;
 
     #[ORM\Column(length: 180)]
     private ?string $password = null;
@@ -62,42 +50,35 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
-
     public function getId(): ?int
     {
         return $this->id;
     }
-
-
-
-=======
 
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
-
-    public function setEmail(string $email): static
-=======
     public function setEmail(string $email): self
-
     {
         $this->email = $email;
 
         return $this;
     }
 
-
     public function getPasswordHash(): ?string
     {
         return $this->password_hash;
     }
 
-    public function setPasswordHash(string $password_hash): static
+    public function setPasswordHash(string $password_hash): self
     {
         $this->password_hash = $password_hash;
-=======
+
+        return $this;
+    }
+
     public function getPassword(): ?string
     {
         return $this->password;
@@ -107,20 +88,21 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->password = $password;
 
-
         return $this;
     }
-
 
     public function getUsername(): ?string
     {
         return $this->username;
     }
 
-    public function setUsername(string $username): static
+    public function setUsername(string $username): self
     {
         $this->username = $username;
-=======
+
+        return $this;
+    }
+
     public function getRoles(): array
     {
         return $this->roles;
@@ -130,17 +112,15 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->roles = $roles;
 
-
         return $this;
     }
-
 
     public function getProfilePicture(): ?string
     {
         return $this->profile_picture;
     }
 
-    public function setProfilePicture(string $profile_picture): static
+    public function setProfilePicture(string $profile_picture): self
     {
         $this->profile_picture = $profile_picture;
 
@@ -152,7 +132,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->bio;
     }
 
-    public function setBio(string $bio): static
+    public function setBio(?string $bio): self
     {
         $this->bio = $bio;
 
@@ -164,7 +144,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->is_private;
     }
 
-    public function setIsPrivate(bool $is_private): static
+    public function setIsPrivate(bool $is_private): self
     {
         $this->is_private = $is_private;
 
@@ -176,7 +156,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): static
+    public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
 
@@ -188,21 +168,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
     {
         $this->updated_at = $updated_at;
 
         return $this;
     }
-}
-=======
+
     public function getSalt(): ?string
     {
         // Not needed for modern algorithms
         return null;
     }
-
-   
 
     public function getUserIdentifier(): string
     {
