@@ -22,6 +22,7 @@ class PostsController extends AbstractController
 
         return $this->render('posts/posts.html.twig', [
             'posts' => $posts,
+            'logo' => 'img/logo.png',
         ]);
     }
 
@@ -41,6 +42,7 @@ class PostsController extends AbstractController
         }
         return $this->render('posts/create.html.twig', [
             'form' => $form->createView(),
+            'logo' => 'img/logo.png',
         ]);
     }
     #[Route('/posts/{id}', name: 'posts_show')]
@@ -70,8 +72,25 @@ public function show(int $id, Request $request, PostsRepository $postsRepository
     return $this->render('posts/show.html.twig', [
         'post' => $post,
         'comment_form' => $commentForm->createView(),
+        'logo' => 'img/logo.png',
     ]);
 }
+
+    public function sidebar(): Response
+    {
+        return $this->render('posts/sidebar.html.twig', [
+            'home' => 'icons/home.png',
+            'posts' => 'icons/posts.png',
+            'search' => 'icons/search.png',
+            'notifications' => 'icons/notifications.png',
+            'profile' => 'icons/profile.png',
+            'settings' => 'icons/settings.png',
+            'logout' => 'icons/logout.png',
+            'plus' => 'icons/plus.png',
+        ]);
+    }
+
+
     
 }
 

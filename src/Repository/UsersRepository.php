@@ -2,14 +2,12 @@
 
 namespace App\Repository;
 
-
 use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Users>
- */
+ 
+// @extends ServiceEntityRepository<Users>
 class UsersRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -17,33 +15,7 @@ class UsersRepository extends ServiceEntityRepository
         parent::__construct($registry, Users::class);
     }
 
-=======
-
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-
-use Doctrine\Persistence\ManagerRegistry;
-
-use App\Entity\Users;
-
-
-
-class UsersRepository extends ServiceEntityRepository
-
-{
-
-    public function __construct(ManagerRegistry $registry)
-
-    {
-
-        parent::__construct($registry, Users::class);
-
-    }
-
-}
-
-
-
-    //    /**
+    //    /
     //     * @return Users[] Returns an array of Users objects
     //     */
     //    public function findByExampleField($value): array
@@ -67,8 +39,4 @@ class UsersRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-
 }
-=======
-
-
