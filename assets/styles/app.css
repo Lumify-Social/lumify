@@ -4,3 +4,8 @@ body {
     background-color: #000;
     color: #FFF;
 }
+
+@font-face {
+    font-family: 'Noto';
+    src: url('/public/fonts/Noto-Regular.ttf');
+}
