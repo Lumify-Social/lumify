@@ -24,31 +24,28 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $password_hash = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $username = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $profile_picture = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $bio = null;
-
     #[ORM\Column]
-    private ?bool $is_private = null;
+    private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created_at = null;
+    private ?\DateTimeInterface $updated_at = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
+    #[ORM\Column(name: 'password_hash', length: 255, nullable: false)]
+    private ?string $password = null; // Correspond à la colonne password_hash
 
-    #[ORM\Column(length: 180)]
-    private ?string $password = null;
-
-    #[ORM\Column]
+    #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
     private array $roles = [];
+
+    public const ROLE_USER = 'ROLE_USER';
+
+    public function __construct()
+    {
+        $this->roles = [self::ROLE_USER];
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -67,30 +64,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPasswordHash(): ?string
-    {
-        return $this->password_hash;
-    }
-
-    public function setPasswordHash(string $password_hash): self
-    {
-        $this->password_hash = $password_hash;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
     public function getUsername(): ?string
     {
         return $this->username;
@@ -103,9 +76,49 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updated_at): self
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password; // Toujours faire référence à password
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password; // Symfony comprend que c'est lié à password_hash
+
+        return $this;
+    }
+
     public function getRoles(): array
     {
-        return $this->roles;
+        // Garantir que le rôle utilisateur de base est toujours présent
+        $roles = $this->roles;
+        $roles[] = self::ROLE_USER;
+
+        return array_unique($roles);
     }
 
     public function setRoles(array $roles): self
@@ -115,80 +128,19 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getProfilePicture(): ?string
-    {
-        return $this->profile_picture;
-    }
-
-    public function setProfilePicture(string $profile_picture): self
-    {
-        $this->profile_picture = $profile_picture;
-
-        return $this;
-    }
-
-    public function getBio(): ?string
-    {
-        return $this->bio;
-    }
-
-    public function setBio(?string $bio): self
-    {
-        $this->bio = $bio;
-
-        return $this;
-    }
-
-    public function isPrivate(): ?bool
-    {
-        return $this->is_private;
-    }
-
-    public function setIsPrivate(bool $is_private): self
-    {
-        $this->is_private = $is_private;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $created_at): self
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
-    {
-        $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
-    public function getSalt(): ?string
-    {
-        // Not needed for modern algorithms
-        return null;
-    }
-
     public function getUserIdentifier(): string
     {
         return $this->email;
     }
 
+    public function getSalt(): ?string
+    {
+        // Pas nécessaire car bcrypt ou argon2 sont utilisés
+        return null;
+    }
+
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
+        // Si des données sensibles sont stockées temporairement, les effacer ici
     }
 }
-
