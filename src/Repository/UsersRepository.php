@@ -6,7 +6,7 @@ use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
- 
+
 // @extends ServiceEntityRepository<Users>
 class UsersRepository extends ServiceEntityRepository
 {
