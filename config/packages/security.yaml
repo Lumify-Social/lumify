@@ -14,24 +14,26 @@ security:
     # Configuration des firewalls pour la sécurité des pages
     firewalls:
         # Firewall principal avec la gestion de la connexion via un formulaire
-        main:
-            # Désactive la sécurité pour certaines pages (exemple : pages d'inscription, de login)
-            pattern: ^/(login|register)$
+        dev:
+            pattern: ^/(_(profiler|wdt))
             security: false
-             
+        main:
+            security: true
+            lazy: true
             form_login:
                 login_path: app_login
                 check_path: app_login
-                enable_csrf: true 
-                default_target_path: home  # Page après connexion réussie
+                username_parameter: _email # Correspond au champ name="_username"
+                enable_csrf: false 
+                default_target_path: app_home  # Page après connexion réussie
 
             # Déconnexion et invalidation de session
             logout:
                 path: /logout  # Symfony gère cette route automatiquement
                 target: /login # Redirection après déconnexion
                 invalidate_session: true  # Invalider la session après déconnexion
-            custom_authenticator:
-                - App\Security\UsersAuthenticator
+            # custom_authenticator:
+            #     - App\Security\UsersAuthenticator
 
             remember_me:
                 secret: '%kernel.secret%'
@@ -41,6 +43,6 @@ security:
 
     # Définition des accès contrôlés (qui peut accéder à quelles pages)
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: ROLE_USER }

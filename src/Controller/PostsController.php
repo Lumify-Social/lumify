@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Posts;
@@ -45,37 +46,37 @@ class PostsController extends AbstractController
             'logo' => 'img/logo.png',
         ]);
     }
+
     #[Route('/posts/{id}', name: 'posts_show')]
-public function show(int $id, Request $request, PostsRepository $postsRepository, EntityManagerInterface $entityManager): Response
-{
-    $post = $postsRepository->find($id);
+    public function show(int $id, Request $request, PostsRepository $postsRepository, EntityManagerInterface $entityManager): Response
+    {
+        $post = $postsRepository->find($id);
 
-    if (!$post) {
-        throw $this->createNotFoundException('Publication introuvable.');
+        if (!$post) {
+            throw $this->createNotFoundException('Publication introuvable.');
+        }
+
+        $comment = new Comments();
+        $commentForm = $this->createForm(CommentType::class, $comment);
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment->setPost($post);
+            $comment->setUser($this->getUser());
+            $comment->setCreatedAt(new \DateTimeImmutable());
+
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('posts_show', ['id' => $post->getId()]);
+        }
+
+        return $this->render('posts/show.html.twig', [
+            'post' => $post,
+            'comment_form' => $commentForm->createView(),
+            'logo' => 'img/logo.png',
+        ]);
     }
-
-    $comment = new Comments();
-    $commentForm = $this->createForm(CommentType::class, $comment);
-    $commentForm->handleRequest($request);
-
-    if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-        $comment->setPost($post);
-        $comment->setUser($this->getUser());
-        $comment->setCreatedAt(new \DateTimeImmutable());
-
-        $entityManager->persist($comment);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('posts_show', ['id' => $post->getId()]);
-    }
-
-    return $this->render('posts/show.html.twig', [
-        'post' => $post,
-        'comment_form' => $commentForm->createView(),
-        'logo' => 'img/logo.png',
-    ]);
-}
-
     public function sidebar(): Response
     {
         return $this->render('posts/sidebar.html.twig', [
@@ -89,8 +90,5 @@ public function show(int $id, Request $request, PostsRepository $postsRepository
             'plus' => 'icons/plus.png',
         ]);
     }
-
-
-    
 }
 

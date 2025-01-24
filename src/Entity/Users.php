@@ -18,37 +18,36 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    
     private ?int $id = null;
+
+    public const ROLE_USER = 'ROLE_USER';
+    public function __construct() {
+        $this->roles = [self::ROLE_USER];
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTime();
+    }
+
 
     #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $password_hash = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $username = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $profile_picture = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $bio = null;
-
     #[ORM\Column]
-    private ?bool $is_private = null;
+    private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created_at = null;
+    private ?\DateTimeInterface $updated_at = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
-
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(name: 'password_hash', length: 255, nullable: false)]
     private ?string $password = null;
 
-    #[ORM\Column]
-    private array $roles = [];
+
+    #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
+    private array $roles = ['user'];
+
 
     public function getId(): ?int
     {
@@ -91,6 +90,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
     public function getUsername(): ?string
     {
         return $this->username;
@@ -99,7 +99,10 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
+        return $this;
+    }
 
+    public function getCreatedAt(): ?\DateTimeInterface
         return $this;
     }
 
@@ -115,41 +118,33 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getProfilePicture(): ?string
+
+
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->profile_picture;
+        return $this->updated_at;
     }
 
-    public function setProfilePicture(string $profile_picture): self
-    {
-        $this->profile_picture = $profile_picture;
 
-        return $this;
+    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+
+
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
     }
 
-    public function getBio(): ?string
-    {
-        return $this->bio;
-    }
+    public function setPassword(string $password): self
 
-    public function setBio(?string $bio): self
-    {
-        $this->bio = $bio;
 
-        return $this;
-    }
 
-    public function isPrivate(): ?bool
-    {
-        return $this->is_private;
-    }
-
-    public function setIsPrivate(bool $is_private): self
-    {
-        $this->is_private = $is_private;
-
-        return $this;
-    }
+    public function getRoles(): array {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -159,25 +154,23 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
-
-        return $this;
+        return array_unique($roles);
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updated_at;
-    }
+    // @param list<string> $roles
+
+
+    public function setRoles(array $roles): static {
+        $this->roles = $roles;
 
     public function setUpdatedAt(\DateTimeImmutable $updated_at): self
     {
         $this->updated_at = $updated_at;
-
         return $this;
     }
 
     public function getSalt(): ?string
     {
-        // Not needed for modern algorithms
         return null;
     }
 
@@ -191,4 +184,3 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
     }
 }
-

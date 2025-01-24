@@ -3,18 +3,42 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>S'inscrire</h1>
+    <h1 class="text-center text-3xl font-bold mb-6 text-white">S'inscrire</h1>
 
     {{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Mot de passe'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms,{ 
-        label: 'accepter les conditions'}) }}
+    {{ form_start(registrationForm, {'attr': {'class': 'w-full max-w-md mx-auto bg-gray-800 p-8 rounded-lg shadow-md'}}) }}
+        
+        <div class="mb-4">
+            {{ form_row(registrationForm.username, { 
+                'label': 'Nom d\'utilisateur', 
+                'attr': {'class': 'w-full p-3 bg-black text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500'}
+            }) }}
+        </div>
+        
+        <div class="mb-4">
+            {{ form_row(registrationForm.email, { 
+                'attr': {'class': 'w-full p-3 bg-black text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500'}
+            }) }}
+        </div>
 
-        <button type="submit" class="btn">Register</button>
+        <div class="mb-4">
+            {{ form_row(registrationForm.plainPassword, {
+                'label': 'Mot de passe',
+                'attr': {'class': 'w-full p-3 bg-black text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500'}
+            }) }}
+        </div>
+
+        <div class="mb-6">
+            {{ form_row(registrationForm.agreeTerms, {
+                'label': 'Accepter les conditions',
+                'attr': {'class': 'text-white'}
+            }) }}
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+            S'inscrire
+        </button>
     {{ form_end(registrationForm) }}
 {% endblock %}
+
