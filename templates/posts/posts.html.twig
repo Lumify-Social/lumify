@@ -11,17 +11,23 @@
 
             {% for post in posts %}
                 <div class="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 mb-6">
-                    <p class="font-semibold text-lg text-red-400">{{ post.user.username }}</p>
-                    <p class="mt-2 text-gray-300">
-                        {{ post.content }}
-                    </p>
-                    <p class="text-sm text-gray-500 mt-4">
-                        <em>Publié le {{ post.createdAt|date('d/m/Y H:i') }}</em>
-                    </p>
-                    <a href="{{ path('posts_show', { id: post.id }) }}" class="text-red-400 hover:underline">
-                        Voir les commentaires
-                    </a>
-                </div>
+    <p class="font-semibold text-lg text-red-400">{{ post.user.username }}</p>
+    <p class="mt-2 text-gray-300">
+        {{ post.content }}
+    </p>
+    <p class="text-sm text-gray-500 mt-4">
+        <em>Publié le {{ post.createdAt|date('d/m/Y H:i') }}</em>
+    </p>
+    <form action="{{ path('posts_like', { id: post.id }) }}" method="post" class="mt-4">
+        <button type="submit" class="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-all duration-300">
+            ❤️ {{ post.likes }} J'aime
+        </button>
+    </form>
+    <a href="{{ path('posts_show', { id: post.id }) }}" class="text-red-400 hover:underline">
+        Voir les commentaires
+    </a>
+</div>
+
             {% else %}
                 <p class="text-center text-gray-400 italic">
                     Aucune publication à afficher

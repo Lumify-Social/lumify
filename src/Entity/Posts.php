@@ -32,10 +32,15 @@ class Posts
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comments::class, cascade: ['remove'])]
     private Collection $comments;
 
+    #[ORM\Column(type: 'integer')]
+    private int $likes = 0;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        // Initialiser `created_at` si ce n'est pas déjà fait
         $this->created_at = $this->created_at ?? new \DateTimeImmutable();
+        // Initialiser `updated_at` si ce n'est pas déjà fait
         $this->updated_at = $this->updated_at ?? new \DateTimeImmutable();
     }
 
@@ -52,7 +57,6 @@ class Posts
     public function setUser(?Users $user): static
     {
         $this->user = $user;
-
         return $this;
     }
 
@@ -64,7 +68,6 @@ class Posts
     public function setContent(string $content): static
     {
         $this->content = $content;
-
         return $this;
     }
 
@@ -76,7 +79,6 @@ class Posts
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
-
         return $this;
     }
 
@@ -88,7 +90,6 @@ class Posts
     public function setUpdatedAt(?\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
-
         return $this;
     }
 
@@ -106,7 +107,6 @@ class Posts
             $this->comments->add($comment);
             $comment->setPost($this);
         }
-
         return $this;
     }
 
@@ -118,9 +118,29 @@ class Posts
                 $comment->setPost(null);
             }
         }
+        return $this;
+    }
 
+    public function getLikes(): int
+    {
+        return $this->likes;
+    }
+
+    public function setLikes(int $likes): static
+    {
+        $this->likes = $likes;
+        return $this;
+    }
+
+    public function incrementLikes(): static
+    {
+        $this->likes++;
+        return $this;
+    }
+
+    public function decrementLikes(): static
+    {
+        $this->likes = max(0, $this->likes - 1); 
         return $this;
     }
 }
-
-
