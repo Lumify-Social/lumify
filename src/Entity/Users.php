@@ -28,23 +28,26 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->updated_at = new \DateTime();
     }
 
+
     #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     private ?string $username = null;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated_at = null;
 
-
     #[ORM\Column(name: 'password_hash', length: 255, nullable: false)]
     private ?string $password = null;
 
+
     #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
     private array $roles = ['user'];
+
 
     public function getId(): ?int
     {
@@ -63,38 +66,14 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUsername(): ?string
+    public function getPasswordHash(): ?string
     {
-        return $this->username;
+        return $this->password_hash;
     }
 
-    public function setUsername(string $username): self
+    public function setPasswordHash(string $password_hash): self
     {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $created_at): self
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
-    {
-        $this->updated_at = $updated_at;
+        $this->password_hash = $password_hash;
 
         return $this;
     }
@@ -111,18 +90,82 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+
+
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+
+    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+
+
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+
+
+
     public function getRoles(): array {
         $roles = $this->roles;
         $roles[] = 'ROLE_USER';
 
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
         return array_unique($roles);
     }
 
     // @param list<string> $roles
 
+
     public function setRoles(array $roles): static {
         $this->roles = $roles;
 
+    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+    {
+        $this->updated_at = $updated_at;
         return $this;
     }
 

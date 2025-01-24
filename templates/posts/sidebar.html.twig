@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" type="image/png" href="{{ asset(logo) }}">
+		<script src="https://cdn.tailwindcss.com"></script>
+
+		{% block javascripts %}
+			{{ importmap('app') }}
+		{% endblock %}
+	</head>
+	{% block body %}
+		<body>
+			<aside class="fixed top-0 left-0 w-64 h-full border border-s-4 border-zinc-700">
+				<div class="h-full px-3 py-4 bg-black">
+					<a href="/" class="flex justify-center items-center mb-5">
+						<img src="{{ asset(logo) }}" class="h-8" alt="Lumify Logo"/>
+						<span class="self-center text-2xl font-bold text-white">Lumify</span>
+					</a>
+					<ul class="space-y-2 font-medium">
+						<li>
+							<a href="/" class="flex items-center p-2 text-white rounded-lg hover:bg-zinc-700 transition-all">
+								<img src="{{ asset('img/icons/home.png') }}" class="h-8" alt="Home Icon"/>
+
+								<span class="ms-3">Accueil</span>
+							</a>
+						</li>
+						<li>
+							<a href="/posts" class="flex items-center p-2 text-white rounded-lg hover:bg-zinc-700 transition-all">
+								<img src="{{ asset('img/icons/posts.png') }}" class="h-8" alt="Posts Icon"/>
+
+								<span class="ms-3">Publications</span>
+							</a>
+						</li>
+						<li>
+							<a href="/404" class="flex items-center p-2 text-white rounded-lg hover:bg-zinc-700 transition-all">
+								<img src="{{ asset('img/icons/search.png') }}" class="h-8" alt="Search Icon"/>
+
+								<span class="ms-3">Rechercher</span>
+							</a>
+						</li>
+						<li>
+							<a href="/notifications" class="flex items-center p-2 text-white rounded-lg hover:bg-zinc-700 transition-all">
+								<img src="{{ asset('img/icons/notifications.png') }}" class="h-8" alt="Notifications Icon"/>
+
+								<span class="ms-3">Notifications</span>
+							</a>
+						</li>
+						<li>
+							<a href="/404" class="flex items-center p-2 text-white rounded-lg hover:bg-zinc-700 transition-all">
+								<img src="{{ asset('img/icons/profile.png') }}" class="h-8" alt="Profile Icon"/>
+
+								<span class="ms-3">Profil</span>
+							</a>
+						</li>
+						<li>
+							<a href="/404" class="flex items-center p-2 text-white rounded-lg hover:bg-zinc-700 transition-all">
+								<img src="{{ asset('img/icons/settings.png') }}" class="h-8" alt="Settings Icon"/>
+
+								<span class="ms-3">Paramètres</span>
+							</a>
+						</li>
+						<li>
+							<a href="/logout" class="flex items-center p-2 text-white rounded-lg hover:bg-zinc-700 hover:text-red-500 transition-all">
+								<img src="{{ asset('img/icons/logout.png') }}" class="h-8" alt="Logout Icon"/>
+
+								<span class="ms-3">Déconnecter</span>
+							</a>
+						</li>
+						<li>
+							<a href="{{ path('posts_create') }}" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-white rounded-3xl group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white">
+								<img src="{{ asset('img/icons/plus.png') }}" class="h-8" alt="Plus Icon"/>
+								<span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-zinc-900 rounded-3xl group-hover:bg-opacity-0">
+									Créer une publication
+								</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</aside>
+		</body>
+	{% endblock %}
+</html>

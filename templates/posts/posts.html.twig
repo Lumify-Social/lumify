@@ -1,46 +1,38 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Toutes les publications{% endblock %}
-
-{% block body %}
-    <div class="bg-gradient-to-br from-black via-red-900 to-gray-900 text-gray-200 min-h-screen">
-        <div class="max-w-2xl mx-auto py-12 px-6">
-            <h1 class="text-4xl font-extrabold text-center mb-10 bg-gradient-to-r from-red-500 via-black-500 to-indigo-500 bg-clip-text text-transparent ">
-                Toutes les publications
-            </h1>
-
-            {% for post in posts %}
-                <div class="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 mb-6">
-    <p class="font-semibold text-lg text-red-400">{{ post.user.username }}</p>
-    <p class="mt-2 text-gray-300">
-        {{ post.content }}
-    </p>
-    <p class="text-sm text-gray-500 mt-4">
-        <em>Publié le {{ post.createdAt|date('d/m/Y H:i') }}</em>
-    </p>
-    <form action="{{ path('posts_like', { id: post.id }) }}" method="post" class="mt-4">
-        <button type="submit" class="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-all duration-300">
-            ❤️ {{ post.likes }} J'aime
-        </button>
-    </form>
-    <a href="{{ path('posts_show', { id: post.id }) }}" class="text-red-400 hover:underline">
-        Voir les commentaires
-    </a>
-</div>
-
-            {% else %}
-                <p class="text-center text-gray-400 italic">
-                    Aucune publication à afficher
-                </p>
-            {% endfor %}
-            <div class="text-center mt-8">
-                <a href="{{ path('posts_create') }}" class="px-6 py-3 bg-gradient-to-r from-red-500 to-black-600 text-white font-semibold rounded-lg hover:from-pink-600 hover:to-black-700 transition-all duration-300">
-                    Créer une publication
-                </a>
-            </div>
-        </div>
-    </div>
-    
+{% block title %}Toutes les publications
 {% endblock %}
 
+{% block body %}
+	{% include 'posts/sidebar.html.twig' %}
+	<div class="bg-black text-zinc-200 min-h-screen">
+		<div class="max-w-2xl mx-auto py-12 px-6">
+			<span class="flex flex-wrap text-4xl font-extrabold text-white text-center justify-center mb-10">
+				Les publications&nbsp;&nbsp;
+				<span class="relative flex size-6">
+					<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+					<span class="relative inline-flex size-6 rounded-full bg-red-500"></span>
+				</span>
+				<span class="text-red-500">&nbsp;&nbsp;EN DIRECT</span>
+			</span>
+			{% for post in posts %}
+				<div class="bg-gradient-to-br from-zinc-800 to-zinc-900 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 mb-6">
+					<p class="font-semibold text-lg text-red-400">{{ post.user.username }}</p>
+					<p class="mt-2 text-zinc-300">
+						{{ post.content }}
+					</p>
+					<p class="text-sm text-zinc-500 mt-4">
+						<em>Publié le
+							{{ post.createdAt|date('d/m/Y H:i') }}</em>
+					</p>
+					<a href="{{ path('posts_show', { id: post.id }) }}" class="text-red-400 hover:underline">
+						Voir les commentaires
+					</a>
+				</div>
+			{% else %}
+				<p class="text-center text-zinc-400 italic">
+					Aucune publication disponible pour le moment.
+				</p>
+			{% endfor %}
+		</div>
+	</div>
 
+{% endblock %}

@@ -46,6 +46,7 @@ class PostsController extends AbstractController
             'logo' => 'img/logo.png',
         ]);
     }
+
     #[Route('/posts/{id}', name: 'posts_show')]
     public function show(int $id, Request $request, PostsRepository $postsRepository, EntityManagerInterface $entityManager): Response
     {
@@ -76,18 +77,18 @@ class PostsController extends AbstractController
             'logo' => 'img/logo.png',
         ]);
     }
-    #[Route('/posts/{id}/like', name: 'posts_like', methods: ['POST'])]
-    public function like(int $id, PostsRepository $postsRepository, EntityManagerInterface $entityManager): Response
+    public function sidebar(): Response
     {
-        $post = $postsRepository->find($id);
-
-        if (!$post) {
-            throw $this->createNotFoundException('Publication introuvable.');
-        }
-
-        $post->incrementLikes();
-        $entityManager->flush();
-
-        return $this->redirectToRoute('posts_index');
+        return $this->render('posts/sidebar.html.twig', [
+            'home' => 'icons/home.png',
+            'posts' => 'icons/posts.png',
+            'search' => 'icons/search.png',
+            'notifications' => 'icons/notifications.png',
+            'profile' => 'icons/profile.png',
+            'settings' => 'icons/settings.png',
+            'logout' => 'icons/logout.png',
+            'plus' => 'icons/plus.png',
+        ]);
     }
 }
+

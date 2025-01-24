@@ -26,6 +26,7 @@ class SecurityController extends AbstractController
             'logo' => 'img/logo.png',
             'last_username' => $lastUsername,
             'error' => $error]);
+
     }
 
     #[Route(path: '/logout', name: 'app_logout')]
