@@ -36,7 +36,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null; // Correspond à la colonne password_hash
 
     #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
-    private array $roles = [];
+    private array $roles = [];  
 
     public const ROLE_USER = 'ROLE_USER';
 
