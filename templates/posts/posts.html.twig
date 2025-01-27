@@ -6,6 +6,7 @@
     {% include 'posts/sidebar.html.twig' %}
     <div class="text-zinc-200 min-h-screen">
         <div class="max-w-2xl mx-auto">
+
             <span class="flex flex-wrap text-4xl font-extrabold text-white text-center justify-center mb-10">
                 <span class="relative flex size-6">
                     <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
@@ -33,19 +34,57 @@
                     </a>
                     </span>
 
-                    <form action="{{ path('posts_like', { id: post.id }) }}" method="post" class="mt-4">
-                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600">
-                            Like
-                        </button>
-                    </form>
-                    <span class="text-zinc-300 mt-2">
-                        {{ post.likesCount }} Likes
-                    </span>
+            <div class="flex flex-wrap text-4xl font-extrabold text-white text-center justify-center mb-10">
+                <div class="relative flex h-6 w-6">
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+                    <span class="relative inline-flex h-6 w-6 rounded-full bg-red-500"></span>
                 </div>
-            {% else %}
-                <p class="text-center text-zinc-400 italic">
-                    Aucune publication disponible pour le moment.
-                </p>
+                <span class="text-red-500 ml-2">EN DIRECT</span>
+            </div>
+
+            {% for post in posts %}
+                <div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700 rounded-lg">
+                    <p class="font-bold text-lg text-white">
+                        {{ post.user.username }}
+                        <span class="text-sm text-zinc-500 ml-2">
+                            {{ post.createdAt|date('d/m/Y - H:i') }}
+                        </span>
+                    </p>
+                                        
+                    <p class="mt-2 text-white">
+                        {{ post.content }}
+                    </p>
+
+                    <hr class="border border-zinc-700 w-full my-5
+
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center text-zinc-300 ml-4">
+                            {% if post.userHasLiked %}
+                                <form action="{{ path('posts_like_remove', { id: post.id }) }}" method="post" class="inline-block whitespace-normal">
+                                    <button type="submit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                                <span>{{ post.likesCount }}</span>
+                            {% else %}
+                                <form action="{{ path('posts_like', { id: post.id }) }}" method="post" class="inline-block whitespace-normal">
+                                    <button type="submit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                                <span>{{ post.likesCount }}</span>
+                            {% endif %}
+                        </div>
+                        <img src="{{ asset('img/icons/repost.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Repost Icon" />
+                        <a href="{{ path('posts_show', { id: post.id }) }}">
+                            <img src="{{ asset('img/icons/comment.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Comment Icon" />
+                        </a>
+                    </div>
+                </div>
             {% endfor %}
         </div>
     </div>
