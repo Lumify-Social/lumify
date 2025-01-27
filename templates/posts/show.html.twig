@@ -3,10 +3,10 @@
 {% block title %}Publication{% endblock %}
 
 {% block body %}
-<div class="bg-gradient-to-br from-black via-purple-900 to-zinc-900 text-zinc-200 min-h-screen">
+<div class="text-zinc-200 min-h-screen">
     <div class="max-w-2xl mx-auto py-12 px-6">
         <div class="bg-gradient-to-br from-zinc-800 to-zinc-900 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 mb-6">
-            <p class="font-semibold text-lg text-pink-400">{{ post.user.username }}</p>
+            <p class="font-semibold text-lg text-white">{{ post.user.username }}</p>
             <p class="mt-2 text-zinc-300">
                 {{ post.content }}
             </p>
@@ -15,10 +15,10 @@
             </p>
         </div>
 
-        <h2 class="text-2xl font-semibold text-pink-500 mb-4">Commentaires :</h2>
+        <h2 class="text-2xl font-semibold text-white mb-4">Commentaires :</h2>
         {% for comment in post.comments %}
             <div class="bg-zinc-700 p-4 rounded mb-4">
-                <p class="text-sm text-pink-400">{{ comment.user.username }}</p>
+                <p class="text-sm text-white">{{ comment.user.username }}</p>
                 <p>{{ comment.content }}</p>
                 <p class="text-xs text-zinc-400">{{ comment.createdAt|date('d/m/Y H:i') }}</p>
             </div>
@@ -27,7 +27,7 @@
         {% endfor %}
 
         <div class="mt-8">
-            <h3 class="text-lg font-semibold text-pink-400 mb-2">Ajouter un commentaire :</h3>
+            <h3 class="text-lg font-semibold text-white mb-2">Ajouter un commentaire :</h3>
             {{ form_start(comment_form, {'attr': {'class': 'space-y-4'}}) }}
             <div>
                 {{ form_widget(comment_form.content, {

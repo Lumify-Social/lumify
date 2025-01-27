@@ -99,6 +99,9 @@ class PostsController extends AbstractController
             'settings' => 'icons/settings.png',
             'logout' => 'icons/logout.png',
             'plus' => 'icons/plus.png',
+            'like' => 'icons/like.png',
+            'comment' => 'icons/comment.png',
+            'repost' => 'icons/repost.png',
         ]);
     }
     #[Route('/posts/{id}/like', name: 'posts_like', methods: ['POST'])]
