@@ -17,7 +17,7 @@ class Posts
     private ?int $id = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false)]  // Cela signifie que la colonne user_id ne peut pas être NULL
     private ?Users $user = null;
 
     #[ORM\Column(type: Types::TEXT)]
