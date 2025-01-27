@@ -1,5 +1,4 @@
-{% block title %}Toutes les publications
-{% endblock %}
+{% block title %}Toutes les publications{% endblock %}
 
 {% block body %}
 	{% include 'posts/sidebar.html.twig' %}
@@ -40,4 +39,21 @@
 		</div>
 	</div>
 
+                    <form action="{{ path('posts_like', { id: post.id }) }}" method="post" class="mt-4">
+                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600">
+                            Like
+                        </button>
+                    </form>
+                    <span class="text-zinc-300 mt-2">
+                        {{ post.likesCount }} Likes
+                    </span>
+                </div>
+            {% else %}
+                <p class="text-center text-zinc-400 italic">
+                    Aucune publication disponible pour le moment.
+                </p>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
+
