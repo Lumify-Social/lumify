@@ -1,4 +1,5 @@
-{% block title %}Toutes les publications{% endblock %}
+{% block title %}Toutes les publications
+{% endblock %}
 
 {% block body %}
 	{% include 'posts/sidebar.html.twig' %}
@@ -15,45 +16,39 @@
 				<div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700">
 					<p class="font-bold text-lg text-white">{{ post.user.username }}&nbsp;&nbsp;<span class="text-sm text-zinc-500 mt-4">
 							{{ post.createdAt|date('d/m/Y - H:i') }}
-					</span></p>
-										
-					<p class="mt-2 text-white">
-						{{ post.content }}
+						</span>
 					</p>
+
+					<a href="{{ path('posts_show', { id: post.id }) }}">
+						<p class="mt-2 text-white">
+							{{ post.content }}
+						</p>
+					</a>
 
 					<hr class=" border border-zinc-700 w-75 mt-5 mb-5">
 
 					<span class="flex whitespace-normal space-x-64 mb-5">
-					<img src="{{ asset('img/icons/like.png') }}" class="h-5 hover:text-red-500" alt="Like Icon"/>
-					<img src="{{ asset('img/icons/repost.png') }}" class="h-5" alt="Repost Icon"/>
-					<a href="{{ path('posts_show', { id: post.id }) }}">
-						<img src="{{ asset('img/icons/comment.png') }}" class="h-5" alt="Comment Icon"/>
-					</a>
+						<img src="{{ asset('img/icons/like.png') }}" class="h-5 hover:text-red-500" alt="Like Icon"/>
+						<img src="{{ asset('img/icons/repost.png') }}" class="h-5" alt="Repost Icon"/>
+						<a href="{{ path('posts_show', { id: post.id }) }}">
+							<img src="{{ asset('img/icons/comment.png') }}" class="h-5" alt="Comment Icon"/>
+						</a>
 					</span>
 				</div>
 			{% else %}
 				<p class="text-center text-zinc-400 italic">
 					Aucune publication disponible pour le moment.
 				</p>
-			{% endfor %}
-		</div>
+				<form action="{{ path('posts_like', { id: post.id }) }}" method="post" class="mt-4">
+					<button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600">
+						Like
+					</button>
+				</form>
+				<span class="text-zinc-300 mt-2">
+					{{ post.likesCount }}
+					Likes
+				</span>
+			</div>
+		{% endfor %}
 	</div>
-
-                    <form action="{{ path('posts_like', { id: post.id }) }}" method="post" class="mt-4">
-                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600">
-                            Like
-                        </button>
-                    </form>
-                    <span class="text-zinc-300 mt-2">
-                        {{ post.likesCount }} Likes
-                    </span>
-                </div>
-            {% else %}
-                <p class="text-center text-zinc-400 italic">
-                    Aucune publication disponible pour le moment.
-                </p>
-            {% endfor %}
-        </div>
-    </div>
-{% endblock %}
-
+</div>{% endblock %}
