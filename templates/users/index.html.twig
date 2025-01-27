@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        {% block title %}Profil de {{ user.username }}{% endblock %}
+    </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ asset(logo) }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    {% block javascripts %}
+        {{ importmap('app') }}
+    {% endblock %}
+</head>
+<body class="bg-zinc-900 text-white">
+
+<!-- Navbar -->
+<nav class="border-zinc-200">
+    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <a class="flex items-center space-x-3">
+            <img src="{{ asset(logo) }}" class="h-8" alt="Lumify Logo"/>
+            <span class="self-center text-2xl font-bold text-white">Lumify</span>
+        </a>
+        <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-zinc-400 rounded-lg md:hidden hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-600">
+            <span class="sr-only">Ouvrir le menu</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512" fill="#FFF">
+                <path d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"/>
+            </svg>
+        </button>
+        <div class="hidden w-full md:block md:w-auto">
+            <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 md:flex-row md:space-x-8 md:mt-0">
+                <li><a href="/" class="block py-2 px-3 text-white text-rose-500 md:p-0 transition-all">Accueil</a></li>
+                <li><a href="/posts" class="block py-2 px-3 hover:text-rose-500 md:p-0 text-white transition-all">Publications</a></li>
+                <li><a href="/users" class="block py-2 px-3 hover:text-rose-500 md:p-0 text-white transition-all">Profil</a></li>
+                <li><a href="/register" class="block py-2 px-3 hover:text-rose-500 md:p-0 text-white transition-all">S'inscrire</a></li>
+                <li><a href="/login" class="block py-2 px-3 hover:text-rose-500 md:p-0 text-white transition-all">Se connecter</a></li>
+            </ul>
+        </div>
+    </div>
+    <hr class="border-zinc-700 mx-auto">
+</nav>
+
+<!-- Profil -->
+{% block body %}
+<div class="bg-zinc-800 min-h-screen py-12 px-6">
+    <div class="max-w-4xl mx-auto bg-zinc-900 p-6 rounded-lg shadow-lg">
+        <!-- Titre du Profil avec photo à droite du nom d'utilisateur -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-4xl font-bold text-white">Bienvenue, {{ user.username }}!</h1>
+                <p class="mt-2 text-lg text-zinc-400">Email : {{ user.email }}</p>
+
+              <form method="post" action="{{ path('update_bio') }}" class="mt-4">
+    <textarea name="bio" rows="4" class="w-full p-2 text-white bg-zinc-700 border-2 border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Écrivez votre bio ici...">{{ user.bio ? user.bio : '' }}</textarea>
+    <button type="submit" class="mt-2 py-2 px-4 bg-rose-500 text-white rounded-md hover:bg-rose-600 focus:outline-none">Mettre à jour la bio</button>
+</form>
+
+            </div>
+            
+            <!-- Affichage de la photo de profil avec taille agrandie -->
+            <div class="ml-6">
+                {% if user.profilePicture %}
+                    <img src="{{ asset('uploads/profile_pictures/' ~ user.profilePicture) }}" alt="Photo de profil" class="w-32 h-32 rounded-full border-2 border-zinc-700">
+                {% else %}
+                    <img src="{{ asset('img/photoprofil.jpg') }}" alt="Photo de profil par défaut" class="w-32 h-32 rounded-full border-2 border-zinc-700">
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Affichage des posts -->
+        <div class="mt-8">
+            <h2 class="text-2xl font-semibold text-white">Mes publications</h2>
+
+            {% if posts is empty %}
+                <p class="text-zinc-400 mt-4">Aucune publication pour le moment.</p>
+            {% else %}
+                <ul class="space-y-4 mt-4">
+                    {% for post in posts %}
+                        <li class="bg-zinc-700 p-4 rounded-lg shadow-md">
+                            <div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700">
+                                <p class="font-bold text-lg text-white">{{ post.user.username }}&nbsp;&nbsp;<span class="text-sm text-zinc-500 mt-4">
+                                    {{ post.createdAt|date('d/m/Y - H:i') }}
+                                </span></p>
+
+                                <p class="mt-2 text-white">
+                                    {{ post.content }}
+                                </p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+</body>
+</html>

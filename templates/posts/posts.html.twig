@@ -1,9 +1,39 @@
+{% extends 'base.html.twig' %}
+
 {% block title %}Toutes les publications{% endblock %}
 
 {% block body %}
     {% include 'posts/sidebar.html.twig' %}
     <div class="text-zinc-200 min-h-screen">
         <div class="max-w-2xl mx-auto">
+
+            <span class="flex flex-wrap text-4xl font-extrabold text-white text-center justify-center mb-10">
+                <span class="relative flex size-6">
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+                    <span class="relative inline-flex size-6 rounded-full bg-red-500"></span>
+                </span>
+                <span class="text-red-500">&nbsp;&nbsp;EN DIRECT</span>
+            </span>
+            {% for post in posts %}
+                <div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700">
+                    <p class="font-bold text-lg text-white">{{ post.user.username }}&nbsp;&nbsp;<span class="text-sm text-zinc-500 mt-4">
+                            {{ post.createdAt|date('d/m/Y - H:i') }}
+                    </span></p>
+                                        
+                    <p class="mt-2 text-white">
+                        {{ post.content }}
+                    </p>
+
+                    <hr class=" border border-zinc-700 w-75 mt-5 mb-5">
+
+                    <span class="flex whitespace-normal space-x-64 mb-5">
+                    <img src="{{ asset('img/icons/like.png') }}" class="h-5 hover:text-red-500" alt="Like Icon"/>
+                    <img src="{{ asset('img/icons/repost.png') }}" class="h-5" alt="Repost Icon"/>
+                    <a href="{{ path('posts_show', { id: post.id }) }}">
+                        <img src="{{ asset('img/icons/comment.png') }}" class="h-5" alt="Comment Icon"/>
+                    </a>
+                    </span>
+
             <div class="flex flex-wrap text-4xl font-extrabold text-white text-center justify-center mb-10">
                 <div class="relative flex h-6 w-6">
                     <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
@@ -25,7 +55,7 @@
                         {{ post.content }}
                     </p>
 
-                    <hr class="border border-zinc-700 w-full my-5">
+                    <hr class="border border-zinc-700 w-full my-5
 
                     <div class="flex justify-between items-center">
                         <div class="flex items-center text-zinc-300 ml-4">
