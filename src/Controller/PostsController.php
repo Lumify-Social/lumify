@@ -1,9 +1,9 @@
-<?php
+<?php 
 
 namespace App\Controller;
 
 use App\Entity\Posts;
-use App\Form\PostType;
+use App\Entity\Likes;
 use App\Entity\Comments;
 use App\Form\CommentType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Likes;
 
 class PostsController extends AbstractController
 {
@@ -21,8 +20,12 @@ class PostsController extends AbstractController
         $posts = $entityManager->getRepository(Posts::class)->findBy([], ['created_at' => 'DESC']);
         foreach ($posts as $post) {
             $post->likesCount = $entityManager->getRepository(Likes::class)->count(['post' => $post]);
+            $post->userHasLiked = $entityManager->getRepository(Likes::class)->findOneBy([
+                'post' => $post,
+                'user' => $this->getUser(),
+            ]) ? true : false;
         }
-    
+
         return $this->render('posts/posts.html.twig', [
             'posts' => $posts,
             'logo' => 'img/logo.png',
@@ -33,20 +36,15 @@ class PostsController extends AbstractController
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $post = new Posts();
-        $post->setUser($this->getUser()); // Associe l'utilisateur connecté
+        $post->setUser($this->getUser()); 
 
-        $form = $this->createForm(PostType::class, $post);
+        $form = $this->createForm(CommentType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $post->setCreatedAt(new \DateTimeImmutable()); // Initialise la date de création
+            $post->setCreatedAt(new \DateTimeImmutable()); 
             $entityManager->persist($post);
             $entityManager->flush();
-
-            // Gérer les requêtes AJAX
-            if ($request->isXmlHttpRequest()) {
-                return $this->json(['message' => 'Publication créée avec succès !'], Response::HTTP_OK);
-            }
 
             return $this->redirectToRoute('posts_index');
         }
@@ -88,22 +86,6 @@ class PostsController extends AbstractController
         ]);
     }
 
-    public function sidebar(): Response
-    {
-        return $this->render('posts/sidebar.html.twig', [
-            'home' => 'icons/home.png',
-            'posts' => 'icons/posts.png',
-            'search' => 'icons/search.png',
-            'notifications' => 'icons/notifications.png',
-            'profile' => 'icons/profile.png',
-            'settings' => 'icons/settings.png',
-            'logout' => 'icons/logout.png',
-            'plus' => 'icons/plus.png',
-            'like' => 'icons/like.png',
-            'comment' => 'icons/comment.png',
-            'repost' => 'icons/repost.png',
-        ]);
-    }
     #[Route('/posts/{id}/like', name: 'posts_like', methods: ['POST'])]
     public function like(int $id, EntityManagerInterface $entityManager): Response
     {
@@ -130,6 +112,30 @@ class PostsController extends AbstractController
         $entityManager->flush();
 
         return $this->json(['message' => 'Publication likée avec succès.'], Response::HTTP_OK);
+    }
+
+    #[Route('/posts/{id}/like/remove', name: 'posts_like_remove', methods: ['POST'])]
+    public function removeLike(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $post = $entityManager->getRepository(Posts::class)->find($id);
+
+        if (!$post) {
+            throw $this->createNotFoundException('Publication introuvable.');
+        }
+
+        // Vérifier si l'utilisateur a déjà liké ce post
+        $existingLike = $entityManager->getRepository(Likes::class)
+            ->findOneBy(['post' => $post, 'user' => $this->getUser()]);
+
+        if ($existingLike) {
+            // Supprimer le like
+            $entityManager->remove($existingLike);
+            $entityManager->flush();
+
+            return $this->json(['message' => 'Votre like a été supprimé.'], Response::HTTP_OK);
+        }
+
+        return $this->json(['message' => 'Vous n\'avez pas encore liké cette publication.'], Response::HTTP_BAD_REQUEST);
     }
 }
 
