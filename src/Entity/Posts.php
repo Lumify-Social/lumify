@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PostsRepository::class)]
 class Posts
@@ -21,6 +22,7 @@ class Posts
     private ?Users $user = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: "Le contenu de la publication ne peut pas être vide.")]
     private ?string $content = null;
 
     #[ORM\Column]
@@ -32,16 +34,11 @@ class Posts
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comments::class, cascade: ['remove'])]
     private Collection $comments;
 
-    #[ORM\Column(type: 'integer')]
-    private int $likes = 0;
-
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-        // Initialiser `created_at` si ce n'est pas déjà fait
-        $this->created_at = $this->created_at ?? new \DateTimeImmutable();
-        // Initialiser `updated_at` si ce n'est pas déjà fait
-        $this->updated_at = $this->updated_at ?? new \DateTimeImmutable();
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -75,7 +72,6 @@ class Posts
     {
         return $this->created_at;
     }
-
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
@@ -113,34 +109,10 @@ class Posts
     public function removeComment(Comments $comment): static
     {
         if ($this->comments->removeElement($comment)) {
-            // Set the owning side to null (unless already changed)
             if ($comment->getPost() === $this) {
                 $comment->setPost(null);
             }
         }
-        return $this;
-    }
-
-    public function getLikes(): int
-    {
-        return $this->likes;
-    }
-
-    public function setLikes(int $likes): static
-    {
-        $this->likes = $likes;
-        return $this;
-    }
-
-    public function incrementLikes(): static
-    {
-        $this->likes++;
-        return $this;
-    }
-
-    public function decrementLikes(): static
-    {
-        $this->likes = max(0, $this->likes - 1); 
         return $this;
     }
 }
