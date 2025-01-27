@@ -1,0 +1,12 @@
+{% set background = app.session.get('background', 'default.jpg') %}
+
+<style>
+    body {
+        background: {% if background ends with '.jpeg' %}
+                    url('/images/{{ background }}') no-repeat center center fixed;
+                    {% else %}
+                    {{ background }};
+                    {% endif %}
+        background-size: cover;
+    }
+</style>

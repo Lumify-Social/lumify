@@ -86,6 +86,24 @@ class PostsController extends AbstractController
         ]);
     }
 
+    public function sidebar(): Response
+    {
+        return $this->render('posts/sidebar.html.twig', [
+            'home' => 'icons/home.png',
+            'posts' => 'icons/posts.png',
+            'search' => 'icons/search.png',
+            'notifications' => 'icons/notifications.png',
+            'profile' => 'icons/profile.png',
+            'settings' => 'icons/settings.png',
+            'logout' => 'icons/logout.png',
+            'plus' => 'icons/plus.png',
+            'like' => 'icons/like.png',
+            'comment' => 'icons/comment.png',
+            'repost' => 'icons/repost.png',
+            'back' => 'icons/arrow-back.png',
+        ]);
+    }
+
     #[Route('/posts/{id}/like', name: 'posts_like', methods: ['POST'])]
     public function like(int $id, EntityManagerInterface $entityManager): Response
     {
