@@ -9,6 +9,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
 #[Broadcast]
@@ -35,8 +37,17 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'password_hash', length: 255, nullable: false)]
     private ?string $password = null; // Correspond à la colonne password_hash
 
-    #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
-    private array $roles = [];  
+    #[ORM\OneToMany(targetEntity: "App\Entity\Posts", mappedBy: "user")]
+    private Collection $posts;
+
+    #[ORM\Column(type: Types::JSON)]
+    private array $roles = [];
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $bio = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profilePicture = null;
 
     public const ROLE_USER = 'ROLE_USER';
 
@@ -45,6 +56,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = [self::ROLE_USER];
         $this->created_at = new \DateTimeImmutable();
         $this->updated_at = new \DateTime();
+        $this->posts = new ArrayCollection(); // Initialise la collection de posts
     }
 
     public function getId(): ?int
@@ -142,5 +154,38 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // Si des données sensibles sont stockées temporairement, les effacer ici
+    }
+
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    public function editBio(string $bio): self
+    {
+        $this->bio = $bio;
+
+        return $this;
+    }
+
+    public function getProfilePicture(): ?string
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?string $profilePicture): self
+    {
+        $this->profilePicture = $profilePicture;
+        return $this;
+    }
+
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function setPosts(Collection $posts): void
+    {
+        $this->posts = $posts;
     }
 }

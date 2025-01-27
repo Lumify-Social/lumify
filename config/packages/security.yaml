@@ -25,7 +25,7 @@ security:
                 check_path: app_login
                 username_parameter: _email # Correspond au champ name="_username"
                 enable_csrf: false 
-                default_target_path: app_home  # Page après connexion réussie
+                default_target_path: app_users  # Page après connexion réussie
 
             # Déconnexion et invalidation de session
             logout:
@@ -45,4 +45,4 @@ security:
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
-        - { path: ^/, roles: ROLE_USER }
+        - { path: ^/users, roles: ROLE_USER }
