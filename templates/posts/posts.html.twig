@@ -1,5 +1,4 @@
-{% block title %}Toutes les publications
-{% endblock %}
+{% block title %}Toutes les publications{% endblock %}
 
 {% block body %}
 	{% include 'posts/sidebar.html.twig' %}
@@ -63,5 +62,71 @@
 			{% endfor %}
 		</div>
 	</div>
-	{% include 'footer.html.twig' %}
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const likeButtons = document.querySelectorAll('.like-button');
+
+    likeButtons.forEach(button => {
+        button.addEventListener('click', async function (event) {
+            event.preventDefault();
+
+            const postId = button.getAttribute('data-post-id');
+            const userHasLiked = button.getAttribute('data-liked') === 'true'; 
+            const url = `/posts/${postId}/like`;
+
+            try {
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log(data);
+
+                // Vérifie que le serveur renvoie les informations nécessaires
+                if (data.likesCount !== undefined && data.liked !== undefined) {
+                    // Met à jour le compteur de likes
+                    const likesCounter = document.getElementById(`likes-count-${postId}`);
+                    if (likesCounter) {
+                        likesCounter.textContent = data.likesCount;
+                    }
+
+                    // Met à jour l'état du bouton (liked/unliked)
+                    button.setAttribute('data-liked', data.liked.toString());
+
+                    if (data.liked) {
+                        button.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            ${data.likesCount}
+                        `;
+                    } else {
+                        button.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            ${data.likesCount}
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            } 
+        });
+    });
+});
+
+    </script>
+    	{% include 'footer.html.twig' %}
 {% endblock %}

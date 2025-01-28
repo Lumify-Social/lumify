@@ -13,7 +13,7 @@ class Likes
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Posts::class)]
+    #[ORM\ManyToOne(targetEntity: Posts::class, inversedBy: 'likes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Posts $post = null;
 

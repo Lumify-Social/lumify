@@ -8,14 +8,12 @@
 	</title>
 	<link rel="icon" type="image/png" href="{{ asset(logo) }}">
 	<script src="https://cdn.tailwindcss.com"></script>
-
 	{% block javascripts %}
 		{{ importmap('app') }}
 	{% endblock %}
 </head>
 <body>
 	{% include 'posts/sidebar.html.twig' %}
-
 	<!-- Profil -->
 	{% block body %}
 		<div class="min-h-screen py-12 px-6">
@@ -33,9 +31,8 @@
 							<textarea name="bio" rows="4" class="w-full p-2 bg-zinc-700 border-2 border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Écrivez votre bio ici...">{{ user.bio ? user.bio : '' }}</textarea>
 							<button type="submit" class="mt-2 py-2 px-4 bg-rose-500 rounded-md hover:bg-rose-600 focus:outline-none">Mettre à jour la bio</button>
 						</form>
-
 					</div>
-
+ 
 					<!-- Affichage de la photo de profil avec taille agrandie -->
 					<div class="ml-6">
 						{% if user.profilePicture %}
@@ -61,7 +58,7 @@
 												{{ post.createdAt|date('d/m/Y - H:i') }}
 											</span>
 										</p>
-
+                    
 										<p class="mt-2 text-white">
 											{{ post.content }}
 										</p>

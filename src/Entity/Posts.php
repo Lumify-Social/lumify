@@ -19,7 +19,8 @@ class Posts
     #[ORM\Column]
     private int $id;
 
-    #[ORM\ManyToOne]
+    
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Users", inversedBy: "posts")]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: "L'utilisateur associé à la publication ne peut pas être nul.")]
     private ?Users $user = null;
@@ -34,10 +35,10 @@ class Posts
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comments::class, cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comments::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $comments;
 
-    #[ORM\ManyToMany(targetEntity: Users::class)]
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Likes::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $likes;
 
     public function __construct()
@@ -79,6 +80,7 @@ class Posts
     {
         return $this->created_at;
     }
+
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
@@ -133,3 +135,31 @@ class Posts
         return $this->likes->contains($user);
     }
 }   
+
+    /**
+     * @return Collection<int, Likes>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Likes $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setPost($this);
+        }
+        return $this;
+    }
+
+    public function removeLike(Likes $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            if ($like->getPost() === $this) {
+                $like->setPost(null);
+            }
+        }
+        return $this;
+    }
+}
