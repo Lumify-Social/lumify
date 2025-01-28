@@ -7,6 +7,7 @@ use App\Entity\Likes;
 use App\Entity\Comments;
 use App\Form\PostType;
 use App\Form\CommentType;
+use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

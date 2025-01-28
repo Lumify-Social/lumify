@@ -8,32 +8,29 @@
 	</title>
 	<link rel="icon" type="image/png" href="{{ asset(logo) }}">
 	<script src="https://cdn.tailwindcss.com"></script>
- 
 	{% block javascripts %}
 		{{ importmap('app') }}
 	{% endblock %}
 </head>
 <body>
 	{% include 'posts/sidebar.html.twig' %}
- 
 	<!-- Profil -->
 	{% block body %}
-		<div class="bg-zinc-800 min-h-screen py-12 px-6">
+		<div class="min-h-screen py-12 px-6">
 			<div
-				class="max-w-4xl mx-auto bg-zinc-900 p-6 rounded-lg shadow-lg">
+				class="max-w-4xl mx-auto bg-zinc-900 p-6 rounded-2xl shadow-lg">
 				<!-- Titre du Profil avec photo à droite du nom d'utilisateur -->
 				<div class="flex items-center justify-between">
 					<div>
-						<h1 class="text-4xl font-bold">Bienvenue,
-							{{ user.username }}!</h1>
+						<h1 class="text-4xl font-bold">
+							{{ user.username }}</h1>
 						<p class="mt-2 text-lg text-zinc-400">Email :
 							{{ user.email }}</p>
- 
+
 						<form method="post" action="{{ path('update_bio') }}" class="mt-4">
 							<textarea name="bio" rows="4" class="w-full p-2 bg-zinc-700 border-2 border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Écrivez votre bio ici...">{{ user.bio ? user.bio : '' }}</textarea>
 							<button type="submit" class="mt-2 py-2 px-4 bg-rose-500 rounded-md hover:bg-rose-600 focus:outline-none">Mettre à jour la bio</button>
 						</form>
- 
 					</div>
  
 					<!-- Affichage de la photo de profil avec taille agrandie -->
@@ -45,11 +42,11 @@
 						{% endif %}
 					</div>
 				</div>
- 
+
 				<!-- Affichage des posts -->
 				<div class="mt-8">
 					<h2 class="text-2xl font-semibold">Mes publications</h2>
- 
+
 					{% if posts is empty %}
 						<p class="text-zinc-400 mt-4">Aucune publication pour le moment.</p>
 					{% else %}
@@ -61,7 +58,7 @@
 												{{ post.createdAt|date('d/m/Y - H:i') }}
 											</span>
 										</p>
- 
+                    
 										<p class="mt-2 text-white">
 											{{ post.content }}
 										</p>
