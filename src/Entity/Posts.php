@@ -17,7 +17,8 @@ class Posts
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
+    
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Users", inversedBy: "posts")]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: "L'utilisateur associé à la publication ne peut pas être nul.")]
     private ?Users $user = null;
@@ -37,6 +38,7 @@ class Posts
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Likes::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $likes;
+
 
     public function __construct()
     {
