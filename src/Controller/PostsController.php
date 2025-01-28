@@ -38,7 +38,9 @@ class PostsController extends AbstractController
         $post = new Posts();
         $post->setUser($this->getUser()); 
 
-        $form = $this->createForm(CommentType::class, $post);
+        $form = $this->createForm(CommentType::class, null, [
+            'data_class' => null,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
