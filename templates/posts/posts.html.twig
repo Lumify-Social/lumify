@@ -2,6 +2,36 @@
 {% endblock %}
 
 {% block body %}
+
+    {% include 'posts/sidebar.html.twig' %}
+    
+    <div class="text-zinc-200 min-h-screen">
+        <div class="max-w-2xl mx-auto">
+
+            <!-- Section "EN DIRECT" -->
+            <span class="flex flex-wrap text-4xl font-extrabold text-white text-center justify-center mb-10">
+                <span class="relative flex size-6">
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+                    <span class="relative inline-flex size-6 rounded-full bg-red-500"></span>
+                </span>
+                <span class="text-red-500">&nbsp;&nbsp;EN DIRECT</span>
+            </span>
+
+            <!-- Boucle sur les posts -->
+            {% for post in posts %}
+                <div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700 rounded-lg mb-4">
+                    <p class="font-bold text-lg text-white">{{ post.user.username }}&nbsp;&nbsp;
+                        <span class="text-sm text-zinc-500 mt-4">{{ post.createdAt|date('d/m/Y - H:i') }}</span>
+                    </p>
+                                        
+                    <p class="mt-2 text-white">
+                        {{ post.content }}
+                    </p>
+
+                    <hr class="border border-zinc-700 w-full my-5"> <!-- Fermeture correcte de la balise hr -->
+
+                    <!-- Section Like, Repost, Comment -->
+
 	{% include 'posts/sidebar.html.twig' %}
 	<div class="text-zinc-200 min-h-screen">
 		<div class="max-w-2xl mx-auto">
@@ -44,6 +74,7 @@
                 <span class="text-red-500 ml-2">EN DIRECT</span>
             </div>
 
+
                     <div class="flex justify-between items-center">
                         <div class="flex items-center text-zinc-300 ml-4">
                             {% if post.userHasLiked %}
@@ -72,7 +103,15 @@
                         </a>
                     </div>
                 </div>
+
+            {% endfor %} <!-- Fermeture correcte de la boucle -->
+
+        </div> <!-- Fermeture de la div max-w-2xl -->
+    </div> <!-- Fermeture de la div text-zinc-200 min-h-screen -->
+{% endblock %}
+
             {% endfor %}
         </div>
     </div>
 {% endblock %}
+
