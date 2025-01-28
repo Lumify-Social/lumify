@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Users;
 use App\Entity\Posts;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Users;
+use App\Repository\UsersRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,7 +50,7 @@ class UsersController extends AbstractController
         // Récupérer la bio du formulaire
         $bio = $request->request->get('bio');
 
-       
+
 
         // Enregistrer les changements dans la base de données
         $em->persist($user);
@@ -59,5 +60,21 @@ class UsersController extends AbstractController
         $this->addFlash('success', 'Votre bio a été mise à jour !');
 
         return $this->redirectToRoute('app_users'); // Redirige vers la page de profil
+    }
+
+    #[Route('/{id}', name: 'user_delete', methods: ['POST'])]
+    public function delete(Request $request, Users $user, EntityManagerInterface $em): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
+            $posts = $em->getRepository(Posts::class)->findBy(['user' => $user]);
+            foreach ($posts as $post) {
+                $em->remove($post);
+            }
+            $this->container->get('security.token_storage')->setToken(null);
+            $em->remove($user);
+            $em->flush();
+        }
+        $this->addFlash('deleted', 'Votre compte a été supprimé.');
+        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
     }
 }

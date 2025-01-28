@@ -1,0 +1,13 @@
+{% block title %}Tendances - Lumify
+{% endblock %}
+
+{% block body %}
+	{% include 'posts/sidebar.html.twig' %}
+
+<div class="flex flex-col items-center justify-center min-h-screen">
+    {% include 'trends/search.html.twig' %}
+    {% include 'trends/trends.html.twig' %}
+</div>
+
+	
+{% endblock %}

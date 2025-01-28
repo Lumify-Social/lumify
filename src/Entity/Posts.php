@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Users;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: PostsRepository::class)]
 class Posts
@@ -15,7 +17,7 @@ class Posts
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -35,9 +37,13 @@ class Posts
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comments::class, cascade: ['remove'])]
     private Collection $comments;
 
+    #[ORM\ManyToMany(targetEntity: Users::class)]
+    private Collection $likes;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->likes = new ArrayCollection();
         $this->created_at = new \DateTimeImmutable();
         $this->updated_at = new \DateTimeImmutable();
     }
@@ -116,4 +122,14 @@ class Posts
         }
         return $this;
     }
-}
+
+    public function getLikesCount(): int
+    {
+        return $this->likes->count();
+    }
+    
+    public function userHasLiked(Users $user): bool
+    {
+        return $this->likes->contains($user);
+    }
+}   

@@ -3,36 +3,51 @@
 {% block title %}Me connecter{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <form method="post" class="w-full max-w-md mx-auto bg-zinc-900 p-8 rounded-lg shadow-md mt-10">
+        {% if error %}
+            <div class="mb-4 p-3 bg-red-600 text-white rounded-md">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            Vous êtes déjà connecté(e) {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Me déconnecter</a>
+        {% if app.user %}
+            <div class="mb-4 text-white">
+                Vous êtes déjà connecté(e) {{ app.user.userIdentifier }}, 
+                <a href="{{ path('app_logout') }}" class="text-pink-500 hover:underline">Me déconnecter</a>
+            </div>
+        {% endif %}
+
+        <h1 class="text-center text-3xl font-bold mb-6 text-white">Connexion</h1>
+
+        <div class="mb-4">
+            <label for="inputEmail" class="block text-sm font-medium text-white mb-2">E-mail</label>
+            <input type="email" value="{{ last_username }}" name="_email" id="inputEmail" 
+                   class="w-full p-3 bg-black text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500" 
+                   autocomplete="email" required autofocus>
         </div>
-    {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
-    <label for="inputEmail">E-mail</label>
-    <input type="email" value="{{ last_username }}" name="_email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Mot de passe</label>
-    <input type="password" name="_password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+        <div class="mb-4">
+            <label for="inputPassword" class="block text-sm font-medium text-white mb-2">Mot de passe</label>
+            <input type="password" name="_password" id="inputPassword" 
+                   class="w-full p-3 bg-black text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500" 
+                   autocomplete="current-password" required>
+        </div>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Se souvenir de moi 
-        </label>
-    </div>
+        <div class="mb-6">
+            <label class="inline-flex items-center text-white">
+                <input type="checkbox" name="_remember_me" class="mr-2">
+                Se souvenir de moi
+            </label>
+        </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-       Connexion
-    </button>
-    <p> Vou sn'êtes pas encore inscrit ? <a href="{{ path('app_login' )}}">S'inscrire</a></p>
-</form>
+        <button class="w-full py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500" type="submit">
+            Connexion
+        </button>
+
+        <p class="mt-4 text-center text-white">Vous n'êtes pas encore inscrit ? 
+            <a href="{{ path('app_register') }}" class="text-pink-500 hover:underline">S'inscrire</a>
+        </p>
+    </form>
 {% endblock %}
