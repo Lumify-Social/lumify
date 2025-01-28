@@ -7,7 +7,6 @@ use App\Entity\Likes;
 use App\Entity\Comments;
 use App\Form\PostType;
 use App\Form\CommentType;
-use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -115,6 +114,9 @@ class PostsController extends AbstractController
     public function like(int $id, EntityManagerInterface $entityManager): JsonResponse
     {
         $post = $entityManager->getRepository(Posts::class)->find($id);
+        $post = $entityManager->getRepository(Posts::class)->find($id);
+        $post->likesCount = $entityManager->getRepository(Likes::class)->count(['post' => $post]);
+        $post->userHasLiked = $entityManager->getRepository(Likes::class)->findOneBy(['post' => $post, 'user' => $this->getUser(),]) ? true : false;
         if (!$post) {
             return new JsonResponse(['message' => 'Publication introuvable.'], JsonResponse::HTTP_NOT_FOUND);
         }
@@ -147,5 +149,4 @@ class PostsController extends AbstractController
 
         return new JsonResponse(['liked' => true, 'likesCount' => $likesCount], JsonResponse::HTTP_OK);
     }
-
 }
