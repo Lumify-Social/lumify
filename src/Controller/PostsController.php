@@ -38,7 +38,9 @@ class PostsController extends AbstractController
         $post = new Posts();
         $post->setUser($this->getUser()); 
 
-        $form = $this->createForm(CommentType::class, $post);
+        $form = $this->createForm(CommentType::class, null, [
+            'data_class' => null,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -83,6 +85,24 @@ class PostsController extends AbstractController
             'post' => $post,
             'comment_form' => $form->createView(),
             'logo' => 'img/logo.png',
+        ]);
+    }
+
+    public function sidebar(): Response
+    {
+        return $this->render('posts/sidebar.html.twig', [
+            'home' => 'icons/home.png',
+            'posts' => 'icons/posts.png',
+            'search' => 'icons/search.png',
+            'notifications' => 'icons/notifications.png',
+            'profile' => 'icons/profile.png',
+            'settings' => 'icons/settings.png',
+            'logout' => 'icons/logout.png',
+            'plus' => 'icons/plus.png',
+            'like' => 'icons/like.png',
+            'comment' => 'icons/comment.png',
+            'repost' => 'icons/repost.png',
+            'back' => 'icons/arrow-back.png',
         ]);
     }
 

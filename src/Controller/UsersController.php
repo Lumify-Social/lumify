@@ -37,27 +37,29 @@ class UsersController extends AbstractController
     }
 
     #[Route('/users/update-bio', name: 'update_bio', methods: ['POST'])]
-    public function updateBio(Request $request, EntityManagerInterface $em): Response
-    {
-        // Récupérer l'utilisateur actuellement connecté
-        $user = $this->getUser();
+public function updateBio(Request $request, EntityManagerInterface $em): Response
+{
+    // Récupérer l'utilisateur actuellement connecté
+    $user = $this->getUser();
 
-        if (!$user) {
-            throw $this->createAccessDeniedException('Vous devez être connecté pour mettre à jour votre bio.');
-        }
-
-        // Récupérer la bio du formulaire
-        $bio = $request->request->get('bio');
-
-       
-
-        // Enregistrer les changements dans la base de données
-        $em->persist($user);
-        $em->flush();
-
-        // Rediriger vers la page de profil avec un message de succès
-        $this->addFlash('success', 'Votre bio a été mise à jour !');
-
-        return $this->redirectToRoute('app_users'); // Redirige vers la page de profil
+    if (!$user) {
+        throw $this->createAccessDeniedException('Vous devez être connecté pour mettre à jour votre bio.');
     }
+
+    // Récupérer la bio du formulaire
+    $bio = $request->request->get('bio');
+
+    // Vérifier si la bio n'est pas vide et la mettre à jour
+    if ($bio) {
+        $user->editBio($bio);  // Met à jour la bio de l'utilisateur
+        $em->persist($user);  // Persister l'utilisateur mis à jour
+        $em->flush();  // Enregistrer les changements
+    }
+
+    // Rediriger vers la page de profil avec un message de succès
+    $this->addFlash('success', 'Votre bio a été mise à jour !');
+
+    return $this->redirectToRoute('app_users'); // Redirige vers la page de profil
+}
+
 }
