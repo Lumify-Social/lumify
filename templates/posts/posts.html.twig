@@ -1,71 +1,10 @@
-{% block title %}Toutes les publications
-{% endblock %}
+
+{% block title %}Toutes les publications{% endblock %}
 
 {% block body %}
-
     {% include 'posts/sidebar.html.twig' %}
-    
     <div class="text-zinc-200 min-h-screen">
         <div class="max-w-2xl mx-auto">
-
-            <!-- Section "EN DIRECT" -->
-            <span class="flex flex-wrap text-4xl font-extrabold text-white text-center justify-center mb-10">
-                <span class="relative flex size-6">
-                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
-                    <span class="relative inline-flex size-6 rounded-full bg-red-500"></span>
-                </span>
-                <span class="text-red-500">&nbsp;&nbsp;EN DIRECT</span>
-            </span>
-
-            <!-- Boucle sur les posts -->
-            {% for post in posts %}
-                <div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700 rounded-lg mb-4">
-                    <p class="font-bold text-lg text-white">{{ post.user.username }}&nbsp;&nbsp;
-                        <span class="text-sm text-zinc-500 mt-4">{{ post.createdAt|date('d/m/Y - H:i') }}</span>
-                    </p>
-                                        
-                    <p class="mt-2 text-white">
-                        {{ post.content }}
-                    </p>
-
-                    <hr class="border border-zinc-700 w-full my-5"> <!-- Fermeture correcte de la balise hr -->
-
-                    <!-- Section Like, Repost, Comment -->
-
-	{% include 'posts/sidebar.html.twig' %}
-	<div class="text-zinc-200 min-h-screen">
-		<div class="max-w-2xl mx-auto">
-			<span class="flex flex-wrap text-4xl font-extrabold text-white text-center justify-center mb-10">
-				<span class="relative flex size-6">
-					<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
-					<span class="relative inline-flex size-6 rounded-full bg-red-500"></span>
-				</span>
-				<span class="text-red-500">&nbsp;&nbsp;EN DIRECT</span>
-			</span>
-			{% for post in posts %}
-				<div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700">
-					<p class="font-bold text-lg text-white">{{ post.user.username }}&nbsp;&nbsp;<span class="text-sm text-zinc-500 mt-4">
-							{{ post.createdAt|date('d/m/Y - H:i') }}
-						</span>
-					</p>
-
-					<a href="{{ path('posts_show', { id: post.id }) }}">
-						<p class="mt-2 text-white">
-							{{ post.content }}
-						</p>
-					</a>
-
-					<hr class=" border border-zinc-700 w-75 mt-5 mb-5">
-
-					<span class="flex whitespace-normal space-x-64 mb-5">
-						<img src="{{ asset('img/icons/like.png') }}" class="h-5 hover:text-red-500" alt="Like Icon"/>
-						<img src="{{ asset('img/icons/repost.png') }}" class="h-5" alt="Repost Icon"/>
-						<a href="{{ path('posts_show', { id: post.id }) }}">
-							<img src="{{ asset('img/icons/comment.png') }}" class="h-5" alt="Comment Icon"/>
-						</a>
-					</span>
-				</div>
-
             <div class="flex flex-wrap text-4xl font-extrabold text-white text-center justify-center mb-10">
                 <div class="relative flex h-6 w-6">
                     <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
@@ -74,44 +13,111 @@
                 <span class="text-red-500 ml-2">EN DIRECT</span>
             </div>
 
+            {% for post in posts %}
+                <div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700 mb-6" id="post-{{ post.id }}">
+                    <p class="font-bold text-lg text-white">
+                        {{ post.user.username }}
+                        <span class="text-sm text-zinc-500 ml-2">
+                            {{ post.createdAt|date('d/m/Y - H:i') }}
+                        </span>
+                    </p>
+
+                    <a href="{{ path('posts_show', { id: post.id }) }}">
+                        <p class="mt-2 text-white">{{ post.content }}</p>
+                    </a>
+
+                    <hr class="border border-zinc-700 w-full my-5">
 
                     <div class="flex justify-between items-center">
-                        <div class="flex items-center text-zinc-300 ml-4">
-                            {% if post.userHasLiked %}
-                                <form action="{{ path('posts_like_remove', { id: post.id }) }}" method="post" class="inline-block whitespace-normal">
-                                    <button type="submit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                        </svg>
-                                    </button>
-                                </form>
-                                <span>{{ post.likesCount }}</span>
-                            {% else %}
-                                <form action="{{ path('posts_like', { id: post.id }) }}" method="post" class="inline-block whitespace-normal">
-                                    <button type="submit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                        </svg>
-                                    </button>
-                                </form>
-                                <span>{{ post.likesCount }}</span>
-                            {% endif %}
+                        <div class="flex items-center text-zinc-300">
+                            <button class="like-button flex items-center" data-post-id="{{ post.id }}" data-liked="{{ post.userHasLiked }}">
+                                {% if post.userHasLiked %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                    </svg>
+                                {% else %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                    </svg>
+                                {% endif %}
+                                <span id="likes-count-{{ post.id }}">{{ post.likesCount }}</span>
+                            </button>
                         </div>
-                        <img src="{{ asset('img/icons/repost.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Repost Icon" />
+
+                        <img src="{{ asset('img/icons/repost.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Repost Icon">
                         <a href="{{ path('posts_show', { id: post.id }) }}">
-                            <img src="{{ asset('img/icons/comment.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Comment Icon" />
+                            <img src="{{ asset('img/icons/comment.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Comment Icon">
                         </a>
                     </div>
                 </div>
-
-            {% endfor %} <!-- Fermeture correcte de la boucle -->
-
-        </div> <!-- Fermeture de la div max-w-2xl -->
-    </div> <!-- Fermeture de la div text-zinc-200 min-h-screen -->
-{% endblock %}
-
             {% endfor %}
         </div>
     </div>
-{% endblock %}
 
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const likeButtons = document.querySelectorAll('.like-button');
+
+    likeButtons.forEach(button => {
+        button.addEventListener('click', async function (event) {
+            event.preventDefault();
+
+            const postId = button.getAttribute('data-post-id');
+            const userHasLiked = button.getAttribute('data-liked') === 'true'; 
+            const url = `/posts/${postId}/like`;
+
+            try {
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log(data);
+
+                // Vérifie que le serveur renvoie les informations nécessaires
+                if (data.likesCount !== undefined && data.liked !== undefined) {
+                    // Met à jour le compteur de likes
+                    const likesCounter = document.getElementById(`likes-count-${postId}`);
+                    if (likesCounter) {
+                        likesCounter.textContent = data.likesCount;
+                    }
+
+                    // Met à jour l'état du bouton (liked/unliked)
+                    button.setAttribute('data-liked', data.liked.toString());
+
+                    if (data.liked) {
+                        button.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            ${data.likesCount}
+                        `;
+                    } else {
+                        button.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            ${data.likesCount}
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            } 
+        });
+    });
+});
+
+    </script>
+
+{% endblock %}

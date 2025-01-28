@@ -33,14 +33,17 @@ class Posts
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comments::class, cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comments::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $comments;
 
-    
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Likes::class, cascade: ['remove'], orphanRemoval: true)]
+    private Collection $likes;
+
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->likes = new ArrayCollection();
         $this->created_at = new \DateTimeImmutable();
         $this->updated_at = new \DateTimeImmutable();
     }
@@ -76,6 +79,7 @@ class Posts
     {
         return $this->created_at;
     }
+
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
@@ -115,6 +119,33 @@ class Posts
         if ($this->comments->removeElement($comment)) {
             if ($comment->getPost() === $this) {
                 $comment->setPost(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Likes>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Likes $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setPost($this);
+        }
+        return $this;
+    }
+
+    public function removeLike(Likes $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            if ($like->getPost() === $this) {
+                $like->setPost(null);
             }
         }
         return $this;
