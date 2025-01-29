@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Posts;
 use App\Entity\Likes;
 use App\Entity\Comments;
-use App\Form\PostType;
 use App\Form\CommentType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
