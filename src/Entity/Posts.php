@@ -134,8 +134,6 @@ class Posts
     {
         return $this->likes->contains($user);
     }
-}   
-
     /**
      * @return Collection<int, Likes>
      */

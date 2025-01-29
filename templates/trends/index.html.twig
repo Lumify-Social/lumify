@@ -4,9 +4,16 @@
 {% block body %}
 	{% include 'posts/sidebar.html.twig' %}
 
-<div class="flex flex-col items-center justify-center min-h-screen">
+<div class="flex flex-col items-center justify-center max-w-full">
     {% include 'trends/search.html.twig' %}
-    {% include 'trends/trends.html.twig' %}
+            <div class="flex justify-between w-[50%]">
+                <div class="w-2/6">
+                    {% include 'trends/trends.html.twig' %}
+                </div>
+                <div class="w-2/6">
+                    {% include 'trends/accounts.html.twig' %}
+                </div>
+            </div>
 </div>
 
 	
