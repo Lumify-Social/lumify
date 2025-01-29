@@ -42,7 +42,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::JSON)]
     private array $roles = [];
-
+    
+    
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $bio = null;
 

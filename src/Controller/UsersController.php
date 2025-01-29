@@ -1,14 +1,15 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\Users;
 use App\Entity\Posts;
+use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class UsersController extends AbstractController
 {
@@ -37,14 +38,15 @@ class UsersController extends AbstractController
     }
 
     #[Route('/users/update-bio', name: 'update_bio', methods: ['POST'])]
-public function updateBio(Request $request, EntityManagerInterface $em): Response
-{
-    // Récupérer l'utilisateur actuellement connecté
-    $user = $this->getUser();
+    public function updateBio(Request $request, EntityManagerInterface $em): Response
+    {
+        // Récupérer l'utilisateur actuellement connecté
+        $user = $this->getUser();
 
-    if (!$user) {
-        throw $this->createAccessDeniedException('Vous devez être connecté pour mettre à jour votre bio.');
-    }
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour mettre à jour votre bio.');
+        }
+
 
     // Récupérer la bio du formulaire
     $bio = $request->request->get('bio');
@@ -56,9 +58,36 @@ public function updateBio(Request $request, EntityManagerInterface $em): Respons
         $em->flush();  // Enregistrer les changements
     }
 
-    // Rediriger vers la page de profil avec un message de succès
-    $this->addFlash('success', 'Votre bio a été mise à jour !');
 
+        // Gestion de l'upload de l'image de profil
+        $profilePicture = $request->files->get('profile_picture');
+        
+        if ($profilePicture) {
+            $originalFilename = pathinfo($profilePicture->getClientOriginalName(), PATHINFO_FILENAME);
+            $newFilename = uniqid() . '.' . $profilePicture->guessExtension();
+
+
+            try {
+                // Déplacer le fichier vers le dossier 'public/uploads/profile_pictures'
+                $profilePicture->move(
+                    $this->getParameter('profile_pictures_directory'),
+                    $newFilename
+                );
+
+                // Mettre à jour la photo de profil dans l'entité utilisateur
+                $user->setProfilePicture($newFilename);
+                $em->persist($user);
+                $em->flush();
+            } catch (FileException $e) {
+                // Gérer l'erreur d'upload
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'upload de l\'image.');
+            }
+        }
+
+        // Rediriger vers la page de profil avec un message de succès
+        $this->addFlash('success', 'Votre bio et/ou photo ont été mises à jour !');
+
+        return $this->redirectToRoute('app_users'); // Redirige vers la page de profi
     return $this->redirectToRoute('app_users'); // Redirige vers la page de profil
 }
 #[Route('/{id}', name: 'user_delete', methods: ['POST'])]
@@ -72,8 +101,9 @@ public function delete(Request $request, Users $user, EntityManagerInterface $em
         $this->container->get('security.token_storage')->setToken(null);
         $em->remove($user);
         $em->flush();
+
     }
     $this->addFlash('deleted', 'Votre compte a été supprimé.');
     return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
 }
-}
+

@@ -153,4 +153,13 @@ public function show(int $id, Request $request, EntityManagerInterface $entityMa
 
         return new JsonResponse(['liked' => true, 'likesCount' => $likesCount], JsonResponse::HTTP_OK);
     }
+
+    #[Route('/posts/{id}/like/remove', name: 'posts_like_remove')]
+    public function removeLike(Posts $post)
+    {
+        // Supposons que tu gères la logique de suppression du like ici
+
+        return $this->redirectToRoute('post_show', ['id' => $post->getId()]);
+    }
+
 }
