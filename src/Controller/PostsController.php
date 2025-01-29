@@ -62,35 +62,41 @@ class PostsController extends AbstractController
     }
 
     #[Route('/posts/{id}', name: 'posts_show', methods: ['GET', 'POST'])]
-    public function show(int $id, Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $post = $entityManager->getRepository(Posts::class)->find($id);
+public function show(int $id, Request $request, EntityManagerInterface $entityManager): Response
+{
+    $post = $entityManager->getRepository(Posts::class)->find($id);
 
-        if (!$post) {
-            throw $this->createNotFoundException('Publication introuvable.');
-        }
-
-        $comment = new Comments();
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setPost($post);
-            $comment->setUser($this->getUser());
-            $comment->setCreatedAt(new \DateTimeImmutable());
-
-            $entityManager->persist($comment);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('posts_show', ['id' => $post->getId()]);
-        }
-
-        return $this->render('posts/show.html.twig', [
-            'post' => $post,
-            'comment_form' => $form->createView(),
-            'logo' => 'img/logo.png',
-        ]);
+    if (!$post) {
+        throw $this->createNotFoundException('Publication introuvable.');
     }
+
+    $post->likesCount = $entityManager->getRepository(Likes::class)->count(['post' => $post]);
+    $post->userHasLiked = $entityManager->getRepository(Likes::class)->findOneBy([
+        'post' => $post,
+        'user' => $this->getUser(),
+    ]) ? true : false;
+
+    $comment = new Comments();
+    $form = $this->createForm(CommentType::class, $comment);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $comment->setPost($post);
+        $comment->setUser($this->getUser());
+        $comment->setCreatedAt(new \DateTimeImmutable());
+
+        $entityManager->persist($comment);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('posts_show', ['id' => $post->getId()]);
+    }
+
+    return $this->render('posts/show.html.twig', [
+        'post' => $post,
+        'comment_form' => $form->createView(),
+        'logo' => 'img/logo.png',
+    ]);
+}
 
     public function sidebar(): Response
     {
@@ -141,7 +147,6 @@ class PostsController extends AbstractController
 
         $post->addLike($like);
         $entityManager->persist($like);
-        // $entityManager->persist($post);
         $entityManager->flush();
 
         // Retourne le nombre de likes et l'état du like
