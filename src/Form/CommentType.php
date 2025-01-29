@@ -19,7 +19,7 @@ class CommentType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Publier le commentaire',
-                'attr' => ['class' => 'absolute bg-pink-500 text-white font-semibold py-2 px-4 rounded']
+                'attr' => ['class' => 'absolute bg-rose-500 text-white font-semibold py-2 px-4 rounded']
             ])
             ->add('content', TextType::class, [
                 'attr' => ['class' => 'relative bg-gray-200 placeholder-gray-500 text-black font-medium py-2 px-4 rounded', 'placeholder' => 'Écrivez votre commentaire...']

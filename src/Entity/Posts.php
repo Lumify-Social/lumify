@@ -130,9 +130,15 @@ class Posts
         return $this->likes->count();
     }
 
+
     public function userHasLiked(Users $user): bool
     {
-        return $this->likes->contains($user);
+        foreach ($this->likes as $like) {
+            if ($like->getUser() === $user) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

@@ -8,8 +8,11 @@
             {% include 'posts/trends.html.twig' %}
             {% include 'posts/category.html.twig' %}
 
+
+            <div class="rounded-3xl bg-zinc-900">
             {% for post in posts %}
-                <div class="p-4 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700 items-center">
+                <div class="p-4 shadow-lg hover:shadow-2xl transition-shadow duration-300 border-b border-zinc-700 items-center">
+
                     <div class="flex items-center">
                         {% if post.user.profilePicture %}
                             <img src="{{ asset('uploads/profile_pictures/' ~ post.user.profilePicture) }}" alt="Photo de profil" class="w-12 h-12 rounded-full border-2 border-zinc-700 mr-4">
@@ -27,7 +30,9 @@
                         <p class="text-white ml-14">{{ post.content }}</p>
                     </a>
                     <div class="flex justify-between items-center mx-32">
-                        <div class="flex items-center text-zinc-300 space-x-36 mt-3">
+
+                        <div class="flex items-center text-zinc-300 space-x-36 mt-5">
+
                             <button class="like-button flex items-center" data-post-id="{{ post.id }}" data-liked="{{ post.userHasLiked }}">
                                 {% if post.userHasLiked %}
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-red-500" fill="currentColor" viewBox="0 0 24 24">
@@ -48,6 +53,9 @@
                     </div>
                 </div>
             {% endfor %}
+
+            </div>
+
         </div>
     </div>
 

@@ -13,7 +13,7 @@
         {% if app.user %}
             <div class="mb-4 text-white">
                 Vous êtes déjà connecté(e) {{ app.user.userIdentifier }}, 
-                <a href="{{ path('app_logout') }}" class="text-pink-500 hover:underline">Me déconnecter</a>
+                <a href="{{ path('app_logout') }}" class="text-rose-500 hover:underline">Me déconnecter</a>
             </div>
         {% endif %}
 
@@ -22,14 +22,14 @@
         <div class="mb-4">
             <label for="inputEmail" class="block text-sm font-medium text-white mb-2">E-mail</label>
             <input type="email" value="{{ last_username }}" name="_email" id="inputEmail" 
-                   class="w-full p-3 bg-black text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500" 
+                   class="w-full p-3 bg-black text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" 
                    autocomplete="email" required autofocus>
         </div>
 
         <div class="mb-4">
             <label for="inputPassword" class="block text-sm font-medium text-white mb-2">Mot de passe</label>
             <input type="password" name="_password" id="inputPassword" 
-                   class="w-full p-3 bg-black text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500" 
+                   class="w-full p-3 bg-black text-white border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" 
                    autocomplete="current-password" required>
         </div>
 
@@ -42,12 +42,12 @@
             </label>
         </div>
 
-        <button class="w-full py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500" type="submit">
+        <button class="w-full py-3 bg-rose-600 text-white font-semibold rounded-lg hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500" type="submit">
             Connexion
         </button>
 
         <p class="mt-4 text-center text-white">Vous n'êtes pas encore inscrit ? 
-            <a href="{{ path('app_register') }}" class="text-pink-500 hover:underline">S'inscrire</a>
+            <a href="{{ path('app_register') }}" class="text-rose-500 hover:underline">S'inscrire</a>
         </p>
     </form>
 {% endblock %}
