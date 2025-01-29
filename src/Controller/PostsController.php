@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Posts;
 use App\Entity\Likes;
 use App\Entity\Comments;
-use App\Form\PostType;
 use App\Form\CommentType;
 use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -146,6 +145,13 @@ class PostsController extends AbstractController
         $likesCount = $entityManager->getRepository(Likes::class)->count(['post' => $post]);
 
         return new JsonResponse(['liked' => true, 'likesCount' => $likesCount], JsonResponse::HTTP_OK);
+    }
+    #[Route('/posts/{id}/like/remove', name: 'posts_like_remove')]
+    public function removeLike(Posts $post)
+    {
+        // Supposons que tu gères la logique de suppression du like ici
+
+        return $this->redirectToRoute('post_show', ['id' => $post->getId()]);
     }
 
 }

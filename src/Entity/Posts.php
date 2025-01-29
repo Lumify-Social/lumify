@@ -9,7 +9,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Users;
-use App\Entity\User;
+use App\Entity\Likes;  // Ajoute cet import si ce n'est pas déjà fait
+use App\Entity\Comments;  // Ajoute cet import si ce n'est pas déjà fait
 
 #[ORM\Entity(repositoryClass: PostsRepository::class)]
 class Posts
@@ -19,7 +20,6 @@ class Posts
     #[ORM\Column]
     private int $id;
 
-    
     #[ORM\ManyToOne(targetEntity: "App\Entity\Users", inversedBy: "posts")]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: "L'utilisateur associé à la publication ne peut pas être nul.")]
@@ -129,12 +129,11 @@ class Posts
     {
         return $this->likes->count();
     }
-    
+
     public function userHasLiked(Users $user): bool
     {
         return $this->likes->contains($user);
     }
-}   
 
     /**
      * @return Collection<int, Likes>

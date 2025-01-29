@@ -1,132 +1,100 @@
 {% block title %}Toutes les publications{% endblock %}
 
 {% block body %}
-	{% include 'posts/sidebar.html.twig' %}
-	<div class="text-zinc-200 min-h-screen">
-		<div class="max-w-2xl mx-auto">
-			{% include 'posts/search.html.twig' %}
-			{% include 'posts/trends.html.twig' %}
-			{% include 'posts/category.html.twig' %}
-			{% for post in posts %}
-				<div class="p-4 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700 items-center">
-					<div class="flex items-center">
-						{% if post.user.profilePicture %}
-							<img src="{{ asset('uploads/profile_pictures/' ~ post.user.profilePicture) }}" alt="Photo de profil" class="w-12 h-12 rounded-full border-2 border-zinc-700 mr-4">
-						{% else %}
-							<img src="{{ asset('img/photoprofil.jpg') }}" alt="Photo de profil par défaut" class="w-12 h-12 rounded-full border-2 border-zinc-700 mr-2">
-						{% endif %}
-						<div>
-							<p class="font-bold text-lg text-white">
-								{{ post.user.username }}&nbsp;&nbsp;
-								<span class="text-sm text-zinc-500">{{ post.createdAt|date('d/m/Y - H:i') }}</span>
-							</p>
-						</div>
-					</div>
-					<a href="{{ path('posts_show', { id: post.id }) }}">
-						<p class="text-white ml-14">
-							{{ post.content }}
-						</p>
-					</a>
+    {% include 'posts/sidebar.html.twig' %}
+    <div class="text-zinc-200 min-h-screen">
+        <div class="max-w-2xl mx-auto">
+            {% include 'posts/search.html.twig' %}
+            {% include 'posts/trends.html.twig' %}
+            {% include 'posts/category.html.twig' %}
 
-					<div class="flex justify-between items-center mx-32">
-						<div class="flex items-center text-zinc-300">
-
-							{% if post.userHasLiked %}
-								<form action="{{ path('posts_like_remove', { id: post.id }) }}" method="post" class="inline-block mt-4">
-									<button type="submit">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-red-500" fill="currentColor" viewbox="0 0 24 24">
-											<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-										</svg>
-									</button>
-								</form>
-								<span>{{ post.likesCount }}</span>
-							{% else %}
-								<form action="{{ path('posts_like', { id: post.id }) }}" method="post" class="inline-block mt-4">
-									<button type="submit">
-										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="currentColor" viewbox="0 0 24 24">
-											<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-										</svg>
-									</button>
-								</form>
-								<span>{{ post.likesCount }}</span>
-							{% endif %}
-						</div>
-
-						<img src="{{ asset('img/icons/repost.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Repost Icon"/>
-						<a href="{{ path('posts_show', { id: post.id }) }}">
-							<img src="{{ asset('img/icons/comment.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Comment Icon"/>
-						</a>
-					</div>
-
-				</div>
-			{% endfor %}
-		</div>
-	</div>
+            {% for post in posts %}
+                <div class="p-4 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700 items-center">
+                    <div class="flex items-center">
+                        {% if post.user.profilePicture %}
+                            <img src="{{ asset('uploads/profile_pictures/' ~ post.user.profilePicture) }}" alt="Photo de profil" class="w-12 h-12 rounded-full border-2 border-zinc-700 mr-4">
+                        {% else %}
+                            <img src="{{ asset('img/photoprofil.jpg') }}" alt="Photo de profil par défaut" class="w-12 h-12 rounded-full border-2 border-zinc-700 mr-2">
+                        {% endif %}
+                        <div>
+                            <p class="font-bold text-lg text-white">
+                                {{ post.user.username }}&nbsp;&nbsp;
+                                <span class="text-sm text-zinc-500">{{ post.createdAt|date('d/m/Y - H:i') }}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <a href="{{ path('posts_show', { id: post.id }) }}">
+                        <p class="text-white ml-14">{{ post.content }}</p>
+                    </a>
+                    <div class="flex justify-between items-center mx-32">
+                        <div class="flex items-center text-zinc-300 space-x-36 mt-3">
+                            <button class="like-button flex items-center" data-post-id="{{ post.id }}" data-liked="{{ post.userHasLiked }}">
+                                {% if post.userHasLiked %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                    </svg>
+                                {% else %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                    </svg>
+                                {% endif %}
+                                <span id="likes-count-{{ post.id }}">{{ post.likesCount }}</span>
+                            </button>
+                            <img src="{{ asset('img/icons/repost.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Repost Icon"/>
+                            <a href="{{ path('posts_show', { id: post.id }) }}">
+                                <img src="{{ asset('img/icons/comment.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Comment Icon"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 
     <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const likeButtons = document.querySelectorAll('.like-button');
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.like-button').forEach(button => {
+                button.addEventListener('click', async function (event) {
+                    event.preventDefault();
 
-    likeButtons.forEach(button => {
-        button.addEventListener('click', async function (event) {
-            event.preventDefault();
+                    const postId = button.getAttribute('data-post-id');
+                    const url = `/posts/${postId}/like`;
 
-            const postId = button.getAttribute('data-post-id');
-            const userHasLiked = button.getAttribute('data-liked') === 'true'; 
-            const url = `/posts/${postId}/like`;
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            }
+                        });
 
-            try {
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        const data = await response.json();
+
+                        // Vérification des données retournées par le serveur
+                        if (data.likesCount !== undefined && data.liked !== undefined) {
+                            const likesCounter = document.getElementById(`likes-count-${postId}`);
+                            if (likesCounter) likesCounter.textContent = data.likesCount;
+
+                            // Met à jour l'état du bouton
+                            button.setAttribute('data-liked', data.liked.toString());
+
+                            button.innerHTML = `
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 ${data.liked ? 'text-red-500' : ''}" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                                ${data.likesCount}
+                            `;
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
                     }
                 });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log(data);
-
-                // Vérifie que le serveur renvoie les informations nécessaires
-                if (data.likesCount !== undefined && data.liked !== undefined) {
-                    // Met à jour le compteur de likes
-                    const likesCounter = document.getElementById(`likes-count-${postId}`);
-                    if (likesCounter) {
-                        likesCounter.textContent = data.likesCount;
-                    }
-
-                    // Met à jour l'état du bouton (liked/unliked)
-                    button.setAttribute('data-liked', data.liked.toString());
-
-                    if (data.liked) {
-                        button.innerHTML = `
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                            </svg>
-                            ${data.likesCount}
-                        `;
-                    } else {
-                        button.innerHTML = `
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                            </svg>
-                            ${data.likesCount}
-                        `;
-                    }
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            } 
+            });
         });
-    });
-});
-
     </script>
-    	{% include 'footer.html.twig' %}
+    {% include 'footer.html.twig' %}
 {% endblock %}
