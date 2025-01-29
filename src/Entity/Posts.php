@@ -19,7 +19,6 @@ class Posts
     #[ORM\Column]
     private int $id;
 
-    
     #[ORM\ManyToOne(targetEntity: "App\Entity\Users", inversedBy: "posts")]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotNull(message: "L'utilisateur associé à la publication ne peut pas être nul.")]
@@ -129,11 +128,18 @@ class Posts
     {
         return $this->likes->count();
     }
-    
+
+    // Méthode corrigée pour vérifier si un utilisateur a aimé le post
     public function userHasLiked(Users $user): bool
     {
-        return $this->likes->contains($user);
+        foreach ($this->likes as $like) {
+            if ($like->getUser() === $user) {
+                return true;
+            }
+        }
+        return false;
     }
+
     /**
      * @return Collection<int, Likes>
      */
