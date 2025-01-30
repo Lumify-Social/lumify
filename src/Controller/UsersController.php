@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-
+use App\Entity\Users;
 use App\Entity\Posts;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
