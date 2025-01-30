@@ -1,124 +1,133 @@
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        {% block title %}Profil de {{ user.username }}{% endblock %}
-    </title>
-    <link rel="icon" type="image/png" href="{{ asset(logo) }}">
-    <script src="https://cdn.tailwindcss.com"></script>
-    {% block javascripts %}
-        {{ importmap('app') }}
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const editBtn = document.getElementById('edit-btn');
-                const editForm = document.getElementById('edit-form');
-                
-                // Cacher les champs de modification par défaut
-                editForm.style.display = 'none';
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>
+		{% block title %}Profil de
+			{{ user.username }}
+		{% endblock %}
+	</title>
+	<link rel="icon" type="image/png" href="{{ asset(logo) }}">
+	<script src="https://cdn.tailwindcss.com"></script>
+	{% block javascripts %}
+		{{ importmap('app') }}
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+const editBtn = document.getElementById('edit-btn');
+const editForm = document.getElementById('edit-form');
 
-                // Lorsque l'utilisateur clique sur le bouton, alterner l'affichage du formulaire
-                editBtn.addEventListener('click', function () {
-                    if (editForm.style.display === 'none') {
-                        editForm.style.display = 'block';
-                    } else {
-                        editForm.style.display = 'none';
-                    }
-                });
-            });
-        </script>
-    {% endblock %}
+// Cacher les champs de modification par défaut
+editForm.style.display = 'none';
+
+// Lorsque l'utilisateur clique sur le bouton, alterner l'affichage du formulaire
+editBtn.addEventListener('click', function () {
+if (editForm.style.display === 'none') {
+editForm.style.display = 'block';
+} else {
+editForm.style.display = 'none';
+}
+});
+});
+		</script>
+	{% endblock %}
 </head>
 
 <body class="text-white">
-    {% include 'posts/sidebar.html.twig' %}
-    
-    <!-- Profil -->
-    {% block body %}
-        <div class="min-h-screen py-12 px-6">
-            <div class="max-w-4xl mx-auto bg-zinc-900 p-6 rounded-2xl shadow-lg">
-                
-                <!-- Photo de profil et informations en haut -->
-                <div class="text-center">
-                    <div class="mb-4">
-                        <!-- Photo de profil centrée -->
-                        <div class="inline-block">
-                            {% if user.profilePicture %}
-                                <img src="{{ asset('uploads/profile_pictures/' ~ user.profilePicture) }}" alt="Photo de profil" class="w-40 h-40 rounded-full border-4 border-zinc-700">
-                            {% else %}
-                                <img src="{{ asset('img/photoprofil.jpg') }}" alt="Photo de profil par défaut" class="w-40 h-40 rounded-full border-4 border-zinc-700">
-                            {% endif %}
-                        </div>
-                    </div>
-                    
-                    <!-- Nom d'utilisateur -->
-                    <h1 class="text-3xl font-bold">{{ user.username }}</h1>
-                    <p class="mt-2 text-lg text-zinc-400">{{ user.email }}</p>
-                </div>
+	{% include 'posts/sidebar.html.twig' %}
 
-                <!-- Bio -->
-                <div class="mt-6 text-center">
-                    <h2 class="text-xl font-semibold text-white">Un petit mot sur moi </h2>
-                    <p class="mt-2 text-zinc-400">
-                        {{ user.bio ? user.bio : 'Pas de bio définie.' }}
-                    </p>
-                </div>
+	<!-- Profil -->
+	{% block body %}
+		<div class="min-h-screen py-12 px-6">
+			<div
+				class="max-w-4xl mx-auto bg-zinc-900 p-6 rounded-2xl shadow-lg">
 
-                <!-- Bouton Modifier -->
-                <div class="mt-8 text-center">
-                    <button id="edit-btn" class="py-2 px-4 bg-rose-500 text-white rounded-md hover:bg-rose-600 focus:outline-none">
-                        Modifier
-                    </button>
-                </div>
+				<!-- Photo de profil et informations en haut -->
+				<div class="text-center">
+					<div
+						class="mb-4">
+						<!-- Photo de profil centrée -->
+						<div class="inline-block">
+							{% if user.profilePicture %}
+								<img src="{{ asset('uploads/profile_pictures/' ~ user.profilePicture) }}" alt="Photo de profil" class="w-40 h-40 rounded-full border-4 border-zinc-700">
+							{% else %}
+								<img src="{{ asset('img/photoprofil.jpg') }}" alt="Photo de profil par défaut" class="w-40 h-40 rounded-full border-4 border-zinc-700">
+							{% endif %}
+						</div>
+					</div>
 
-                <!-- Formulaire de mise à jour (initialement masqué) -->
-                <div id="edit-form" class="mt-8">
-                    <form method="post" action="{{ path('update_bio') }}" enctype="multipart/form-data" class="grid grid-cols-1 gap-8">
-                        <!-- Bloc de la bio -->
-                        <div class="bg-zinc-800 p-6 rounded-md shadow-md">
-                            <h2 class="text-xl font-semibold text-white">Modifier la bio</h2>
-                            <textarea name="bio" rows="4" class="w-full p-2 mt-4 bg-zinc-700 border-2 border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Écrivez votre bio ici...">{{ user.bio ? user.bio : '' }}</textarea>
-                        </div>
+					<!-- Nom d'utilisateur -->
+					<h1 class="text-3xl font-bold">{{ user.username }}</h1>
+					<p class="mt-2 text-lg text-zinc-400">{{ user.email }}</p>
+				</div>
 
-                        <!-- Bloc de la photo de profil -->
-                        <div class="bg-zinc-800 p-6 rounded-md shadow-md">
-                            <h2 class="text-xl font-semibold text-white">Modifier la photo</h2>
-                            <div class="mt-4">
-                                <label for="profile_picture" class="block text-white">Sélectionner une nouvelle photo</label>
-                                <input type="file" name="profile_picture" id="profile_picture" class="mt-2 p-2 bg-zinc-700 border-2 border-zinc-600 rounded-md">
-                            </div>
-                        </div>
+				<!-- Bio -->
+				<div class="mt-6 text-center">
+					<h2 class="text-xl font-semibold text-white">Un petit mot sur moi
+					</h2>
+					<p class="mt-2 text-zinc-400">
+						{{ user.bio ? user.bio : 'Pas de bio définie.' }}
+					</p>
+				</div>
 
-                        <!-- Bouton pour soumettre les changements -->
-                        <div class="text-center mt-6">
-                            <button type="submit" class="py-2 px-4 bg-rose-500 rounded-md hover:bg-rose-600 focus:outline-none flex items-center justify-center space-x-2">
-                                <span>Mettre à jour</span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+				<!-- Bouton Modifier -->
+				<div class="mt-8 text-center">
+					<button id="edit-btn" class="py-2 px-4 bg-rose-500 text-white rounded-md hover:bg-rose-600 focus:outline-none">
+						Modifier
+					</button>
+				</div>
 
-                <!-- Affichage des posts -->
-                <div class="mt-8">
-                    <h2 class="text-2xl font-semibold text-white">Mes publications</h2>
-                    {% if posts is empty %}
-                        <p class="text-zinc-400 mt-4">Aucune publication pour le moment.</p>
-                    {% else %}
-                        <ul class="space-y-4 mt-4">
-                            {% for post in posts %}
-                                <li class="bg-zinc-700 p-4 rounded-lg shadow-md">
-                                    <div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700">
-                                        <p class="font-bold text-lg text-white">{{ post.user.username }}&nbsp;&nbsp;<span class="text-sm text-zinc-500">
-                                                {{ post.createdAt|date('d/m/Y - H:i') }}
-                                            </span>
-                                        </p>
-                                        <p class="mt-2 text-white">{{ post.content }}</p>
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    {% endblock %}
+				<!-- Formulaire de mise à jour (initialement masqué) -->
+				<div id="edit-form" class="mt-8">
+					<form
+						method="post" action="{{ path('update_bio') }}" enctype="multipart/form-data" class="grid grid-cols-1 gap-8">
+						<!-- Bloc de la bio -->
+						<div class="bg-zinc-800 p-6 rounded-md shadow-md">
+							<h2 class="text-xl font-semibold text-white">Modifier la bio</h2>
+							<textarea name="bio" rows="4" class="w-full p-2 mt-4 bg-zinc-700 border-2 border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Écrivez votre bio ici...">{{ user.bio ? user.bio : '' }}</textarea>
+						</div>
+
+						<!-- Bloc de la photo de profil -->
+						<div class="bg-zinc-800 p-6 rounded-md shadow-md">
+							<h2 class="text-xl font-semibold text-white">Modifier la photo</h2>
+							<div class="mt-4">
+								<label for="profile_picture" class="block text-white">Sélectionner une nouvelle photo</label>
+								<input type="file" name="profile_picture" id="profile_picture" class="mt-2 p-2 bg-zinc-700 border-2 border-zinc-600 rounded-md">
+							</div>
+						</div>
+
+						<!-- Bouton pour soumettre les changements -->
+						<div class="text-center mt-6">
+							<button type="submit" class="py-2 px-4 bg-rose-500 rounded-md hover:bg-rose-600 focus:outline-none flex items-center justify-center space-x-2">
+								<span>Mettre à jour</span>
+							</button>
+						</div>
+					</form>
+				</div>
+
+				<!-- Affichage des posts -->
+				<div class="mt-8">
+					<h2 class="text-2xl font-semibold text-white">Mes publications</h2>
+					{% if posts is empty %}
+						<p class="text-zinc-400 mt-4">Aucune publication pour le moment.</p>
+					{% else %}
+						<ul class="space-y-4 mt-4">
+							{% for post in posts %}
+								<li class="bg-zinc-700 p-4 rounded-lg shadow-md">
+									<div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700">
+										<p class="font-bold text-lg text-white">{{ post.user.username }}&nbsp;&nbsp;<span class="text-sm text-zinc-500">
+												{{ post.createdAt|date('d/m/Y - H:i') }}
+											</span>
+										</p>
+										<p class="mt-2 text-white">{{ post.content }}</p>
+										{% if post.image %}
+											<img src="{{ asset('uploads/images/' ~ post.image) }}" alt="Image de la publication" class="mt-4 rounded-lg shadow-md max-w-full">
+										{% endif %}
+									</div>
+								</li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	{% endblock %}
 </body>
