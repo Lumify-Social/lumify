@@ -1,5 +1,4 @@
-{% block title %}Toutes les publications
-{% endblock %}
+{% block title %}Toutes les publications{% endblock %}
 
 {% block body %}
 	{% include 'posts/sidebar.html.twig' %}
@@ -34,8 +33,10 @@
 							{% endif %}
 						</a>
 
-						<div class="flex justify-between items-center mx-32">
-							<div class="flex items-center text-zinc-300 space-x-36 mt-5">
+						<div class="flex justify-between items-center mt-5">
+							<!-- Section des actions (like, repost, comment, delete) -->
+							<div class="flex items-center text-zinc-300 space-x-6">
+								<!-- Bouton Like -->
 								<button class="like-button flex items-center" data-post-id="{{ post.id }}" data-liked="{{ post.userHasLiked }}">
 									{% if post.userHasLiked %}
 										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-red-500" fill="currentColor" viewbox="0 0 24 24">
@@ -48,20 +49,24 @@
 									{% endif %}
 									<span id="likes-count-{{ post.id }}">{{ post.likesCount }}</span>
 								</button>
+								<!-- Bouton Repost -->
 								<img src="{{ asset('img/icons/repost.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Repost Icon"/>
+								<!-- Bouton Commentaire -->
 								<a href="{{ path('posts_show', { id: post.id }) }}">
 									<img src="{{ asset('img/icons/comment.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Comment Icon"/>
 								</a>
+							</div>
 
-								{% if app.user and app.user.id == post.user.id %}
-									<!-- Le bouton  apparait suelement si l'utilisateur est connecté et est celui qui a crée le post -->
+							{% if app.user and app.user.id == post.user.id %}
+								<!-- Le bouton supprimer est maintenant dans un conteneur à droite avec un espacement minimal -->
+								<div class="flex items-center justify-end">
 									<form action="{{ path('posts_delete', { id: post.id }) }}" method="POST" onsubmit="return confirm('Êtes-vous sur de vouloir supprimer cette publication ?')">
 										<button type="submit" class="text-white bg-red-600 hover:bg-red-700 py-1 px-3 rounded-full font-bold transition-all duration-300 focus:outline-none">
 											Supprimer
 										</button>
 									</form>
-								{% endif %}
-							</div>
+								</div>
+							{% endif %}
 						</div>
 					</div>
 				{% endfor %}
@@ -71,56 +76,49 @@
 
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
-document.querySelectorAll('.like-button').forEach(button => {
-button.addEventListener('click', async function (event) {
-event.preventDefault();
+			document.querySelectorAll('.like-button').forEach(button => {
+				button.addEventListener('click', async function (event) {
+					event.preventDefault();
 
-const postId = button.getAttribute('data-post-id');
-const url = `/posts/${postId}/like`;
+					const postId = button.getAttribute('data-post-id');
+					const url = `/posts/${postId}/like`;
 
-try {
-const response = await fetch(url, {
-method: 'POST',
-headers: {
-'X-Requested-With': 'XMLHttpRequest',
-'Content-Type': 'application/json',
-'Accept': 'application/json'
-}
-});
+					try {
+						const response = await fetch(url, {
+							method: 'POST',
+							headers: {
+								'X-Requested-With': 'XMLHttpRequest',
+								'Content-Type': 'application/json',
+								'Accept': 'application/json'
+							}
+						});
 
-if (! response.ok) 
-throw new Error (`HTTP error! status: ${
-response.status
-}`);
+						if (! response.ok) 
+							throw new Error (`HTTP error! status: ${response.status}`);
 
+						const data = await response.json();
 
-const data = await response.json();
+						if (data.likesCount !== undefined && data.liked !== undefined) {
+							const likesCounter = document.getElementById(`likes-count-${postId}`);
+							if (likesCounter) 
+								likesCounter.textContent = data.likesCount;
 
-if (data.likesCount !== undefined && data.liked !== undefined) {
-const likesCounter = document.getElementById (`likes-count-${postId}`);
-if (likesCounter) 
-likesCounter.textContent = data.likesCount;
+							button.setAttribute('data-liked', data.liked.toString());
 
-
-button.setAttribute('data-liked', data.liked.toString());
-
-button.innerHTML = `
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 ${
-data.liked ? 'text-red-500' : ''
-}" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                </svg>
-                                ${
-data.likesCount
-}
-                            `;
-}
-} catch (error) {
-console.error('Error:', error);
-}
-});
-});
-});
+							button.innerHTML = `
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 ${data.liked ? 'text-red-500' : ''}" fill="currentColor" viewbox="0 0 24 24">
+									<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+								</svg>
+								${data.likesCount}
+							`;
+						}
+					} catch (error) {
+						console.error('Error:', error);
+					}
+				});
+			});
+		});
 	</script>
+
 	{% include 'footer.html.twig' %}
 {% endblock %}
