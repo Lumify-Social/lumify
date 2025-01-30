@@ -48,9 +48,7 @@
 										{% endif %}
 										<span id="likes-count-{{ post.id }}">{{ post.likesCount }}</span>
 									</button>
-									<a href="{{ path('post_repost', {id: post.id}) }}">
 										<img src="{{ asset('img/icons/repost.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Repost Icon"/>
-									</a>
 									<a href="{{ path('posts_show', { id: post.id }) }}">
 										<img src="{{ asset('img/icons/comment.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Comment Icon"/>
 									</a>
