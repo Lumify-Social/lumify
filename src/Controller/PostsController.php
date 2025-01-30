@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use App\Form\PostType;
 use App\Entity\Posts;
 use App\Entity\Likes;
 use App\Entity\Comments;
