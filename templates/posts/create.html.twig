@@ -13,13 +13,13 @@
 			<div class="mb-6">
 				{{ form_widget(form.content, {'attr': {'class': 'w-full p-4 bg-zinc-800 text-white rounded-2xl shadow-md transition-all', 'placeholder': 'Écrivez votre contenu ici...'}}) }}
 			</div>
+			<div class="mb-6">
+				{{ form_row(form.image, {'attr': {'class': 'w-full p-4 bg-zinc-800 text-white rounded-2xl shadow-md'}}) }}
+			</div>
 			<div class="text-center mt-6">
 				{{ form_row(form.submit, {'attr': {'class': 'px-6 py-3 bg-gradient-to-r from-rose-500 to-purple-600 text-white font-semibold rounded-3xl hover:from-rose-600 hover:to-purple-700 transition-all'}}) }}
 			</div>
 			{{ form_end(form) }}
-
-			<label class="block mb-2 mt-5 text-lg font-medium text-white" for="file_input">Charger un fichier</label>
-			<input class="block w-full text-sm text-zinc-400 border border-zinc-600 rounded-2xl cursor-pointer bg-zinc-700 focus:outline-none placeholder-zinc-400 p-4" id="file_input" type="file">
 		</div>
 	</div>
 {% endblock %}

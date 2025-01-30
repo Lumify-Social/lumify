@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Posts;
 use App\Entity\Likes;
 use App\Entity\Comments;
+use App\Form\PostType;
 use App\Form\CommentType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
 class PostsController extends AbstractController
@@ -48,6 +50,22 @@ class PostsController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setCreatedAt(new \DateTimeImmutable());
+
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                $newFilename = uniqid() . '.' . $imageFile->guessExtension();
+
+                try {
+                    $imageFile->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                    $post->setImage($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors de l\'upload de l\'image.');
+                }
+            }
+
             $entityManager->persist($post);
             $entityManager->flush();
 
@@ -59,43 +77,55 @@ class PostsController extends AbstractController
             'logo' => 'img/logo.png',
         ]);
     }
+    #[Route('/posts/{id}/delete', name: 'posts_delete', methods: ['POST'])]
+    public function delete(Posts $post, EntityManagerInterface $em): RedirectResponse
+    {
+        // vérifie si l'utilisateur connecté est celui qui a crée le post
+        if ($this->getUser() === $post->getUser()) {
+            // Supprime le post de la bdd
+            $em->remove($post);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('posts_index'); 
+    }
 
     #[Route('/posts/{id}', name: 'posts_show', methods: ['GET', 'POST'])]
-public function show(int $id, Request $request, EntityManagerInterface $entityManager): Response
-{
-    $post = $entityManager->getRepository(Posts::class)->find($id);
+    public function show(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $post = $entityManager->getRepository(Posts::class)->find($id);
 
-    if (!$post) {
-        throw $this->createNotFoundException('Publication introuvable.');
+        if (!$post) {
+            throw $this->createNotFoundException('Publication introuvable.');
+        }
+
+        $post->likesCount = $entityManager->getRepository(Likes::class)->count(['post' => $post]);
+        $post->userHasLiked = $entityManager->getRepository(Likes::class)->findOneBy([
+            'post' => $post,
+            'user' => $this->getUser(),
+        ]) ? true : false;
+
+        $comment = new Comments();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setPost($post);
+            $comment->setUser($this->getUser());
+            $comment->setCreatedAt(new \DateTimeImmutable());
+
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('posts_show', ['id' => $post->getId()]);
+        }
+
+        return $this->render('posts/show.html.twig', [
+            'post' => $post,
+            'comment_form' => $form->createView(),
+            'logo' => 'img/logo.png',
+        ]);
     }
-
-    $post->likesCount = $entityManager->getRepository(Likes::class)->count(['post' => $post]);
-    $post->userHasLiked = $entityManager->getRepository(Likes::class)->findOneBy([
-        'post' => $post,
-        'user' => $this->getUser(),
-    ]) ? true : false;
-
-    $comment = new Comments();
-    $form = $this->createForm(CommentType::class, $comment);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $comment->setPost($post);
-        $comment->setUser($this->getUser());
-        $comment->setCreatedAt(new \DateTimeImmutable());
-
-        $entityManager->persist($comment);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('posts_show', ['id' => $post->getId()]);
-    }
-
-    return $this->render('posts/show.html.twig', [
-        'post' => $post,
-        'comment_form' => $form->createView(),
-        'logo' => 'img/logo.png',
-    ]);
-}
 
     public function sidebar(): Response
     {
@@ -153,13 +183,4 @@ public function show(int $id, Request $request, EntityManagerInterface $entityMa
 
         return new JsonResponse(['liked' => true, 'likesCount' => $likesCount], JsonResponse::HTTP_OK);
     }
-
-    #[Route('/posts/{id}/like/remove', name: 'posts_like_remove')]
-    public function removeLike(Posts $post)
-    {
-        // Supposons que tu gères la logique de suppression du like ici
-
-        return $this->redirectToRoute('post_show', ['id' => $post->getId()]);
-    }
-
 }
