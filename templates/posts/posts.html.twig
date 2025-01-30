@@ -9,16 +9,6 @@
 			{% include 'posts/trends.html.twig' %}
 			{% include 'posts/category.html.twig' %}
 
-			{% for post in posts %}
-			<div class="post">
-				{% if post.originalPost %}
-					<p>
-						<strong>Repost de
-							{{ post.originalPost.username }}</strong>
-					</p>
-					<p>{{ post.originalPost.content }}</p>
-				{% endif %}
-			{% endfor %}
 			<div class="rounded-3xl bg-zinc-900">
 				{% for post in posts %}
 					<div class="p-4 shadow-lg hover:shadow-2xl transition-shadow duration-300 border-b border-zinc-700 items-center">
@@ -30,9 +20,19 @@
 								<img src="{{ asset('img/photoprofil.jpg') }}" alt="Photo de profil par défaut" class="w-12 h-12 rounded-full border-2 border-zinc-700 mr-2">
 							{% endif %}
 							<div>
+
+
 								<p class="font-bold text-lg text-white">
 									{{ post.user.username }}&nbsp;&nbsp;
 									<span class="text-sm text-zinc-500">{{ post.createdAt|date('d/m/Y - H:i') }}</span>
+								{% if post.originalPost %}
+									<div class="flex items-center text-green-500 italic">
+										<img src="{{ asset('img/icons/repost.png') }}" class="h-5 transition-transform mr-2" alt="Repost Icon"/>
+										<p>
+											<strong>Repost de {{ post.originalPost.username }}</strong>
+										</p>
+									</div>
+								{% endif %}
 								</p>
 							</div>
 						</div>
@@ -56,7 +56,7 @@
 									<span id="likes-count-{{ post.id }}">{{ post.likesCount }}</span>
 								</button>
 								<a href="{{ path('post_repost', {id: post.id}) }}">
-								<img src="{{ asset('img/icons/repost.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Repost Icon"/>
+									<img src="{{ asset('img/icons/repost.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Repost Icon"/>
 								</a>
 								<a href="{{ path('posts_show', { id: post.id }) }}">
 									<img src="{{ asset('img/icons/comment.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Comment Icon"/>
