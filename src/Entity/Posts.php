@@ -40,6 +40,8 @@ class Posts
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Likes::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $likes;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $image = null;
 
     public function __construct()
     {
@@ -165,6 +167,16 @@ class Posts
                 $like->setPost(null);
             }
         }
+        return $this;
+    }
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
         return $this;
     }
 }
