@@ -40,16 +40,18 @@ class Posts
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Likes::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $likes;
+    
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Repost")]
-    private ?Repost $originalPost = null;
+    #[ORM\OneToMany(mappedBy: "originalPost", targetEntity: self::class)]
+    private Collection $posts;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->likes = new ArrayCollection();
+        $this->posts = new ArrayCollection();
         $this->created_at = new \DateTimeImmutable();
         $this->updated_at = new \DateTimeImmutable();
     }
@@ -103,6 +105,42 @@ class Posts
         return $this;
     }
 
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Posts>
+     */
+    public function getposts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addpost(Posts $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts[] = $post;
+        }
+
+        return $this;
+    }
+
+    public function removepost(Posts $post): self
+    {
+        if ($this->posts->removeElement($post)) {
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Comments>
      */
@@ -134,7 +172,6 @@ class Posts
     {
         return $this->likes->count();
     }
-
 
     public function userHasLiked(Users $user): bool
     {
@@ -170,26 +207,6 @@ class Posts
                 $like->setPost(null);
             }
         }
-        return $this;
-    }
-
-    public function getOriginalPost(): ?Repost
-    {
-        return $this->originalPost;
-    }
-
-    public function setOriginalPost(?Repost $originalPost): self
-    {
-        $this->originalPost = $originalPost;
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): static
-    {
-        $this->image = $image;
         return $this;
     }
 }
