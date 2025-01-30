@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\Entity\Users;
+
 use App\Entity\Posts;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,7 +87,6 @@ class UsersController extends AbstractController
         $this->addFlash('success', 'Votre bio et/ou photo ont été mises à jour !');
 
         return $this->redirectToRoute('app_users'); // Redirige vers la page de profi
-    return $this->redirectToRoute('app_users'); // Redirige vers la page de profil
 }
 #[Route('/{id}', name: 'user_delete', methods: ['POST'])]
 public function delete(Request $request, Users $user, EntityManagerInterface $em): Response

@@ -40,6 +40,8 @@ class Posts
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Likes::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $likes;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $image = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Repost")]
     private ?Repost $originalPost = null;
@@ -179,6 +181,15 @@ class Posts
     public function setOriginalPost(?Repost $originalPost): self
     {
         $this->originalPost = $originalPost;
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
         return $this;
     }
 }
