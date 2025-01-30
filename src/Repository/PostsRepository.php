@@ -16,6 +16,16 @@ class PostsRepository extends ServiceEntityRepository
         parent::__construct($registry, Posts::class);
     }
 
+    public function findAllWithRepost(): array
+{
+    return $this->createQueryBuilder('t')
+        ->leftJoin('t.originalPost', 'o')
+        ->addSelect('o')
+        ->orderBy('t.id', 'DESC')
+        ->getQuery()
+        ->getResult();
+}
+
 //    /**
 //     * @return Posts[] Returns an array of Posts objects
 //     */

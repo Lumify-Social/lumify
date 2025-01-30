@@ -9,8 +9,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Users;
-use App\Entity\Likes;  // Ajoute cet import si ce n'est pas déjà fait
-use App\Entity\Comments;  // Ajoute cet import si ce n'est pas déjà fait
+use App\Entity\Likes;
+use App\Entity\Comments;
 
 #[ORM\Entity(repositoryClass: PostsRepository::class)]
 class Posts
@@ -40,6 +40,9 @@ class Posts
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Likes::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $likes;
+
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Repost")]
+    private ?Repost $originalPost = null;
 
     public function __construct()
     {
@@ -165,6 +168,17 @@ class Posts
                 $like->setPost(null);
             }
         }
+        return $this;
+    }
+
+    public function getOriginalPost(): ?Repost
+    {
+        return $this->originalPost;
+    }
+
+    public function setOriginalPost(?Repost $originalPost): self
+    {
+        $this->originalPost = $originalPost;
         return $this;
     }
 }

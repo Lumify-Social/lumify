@@ -6,14 +6,15 @@ use App\Entity\Posts;
 use App\Entity\Likes;
 use App\Entity\Comments;
 use App\Form\CommentType;
+use App\Form\PostType;
+use App\Entity\Repost;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
-
+use Symfony\Component\Security\Core\Security;
 
 class PostsController extends AbstractController
 {
@@ -162,4 +163,23 @@ public function show(int $id, Request $request, EntityManagerInterface $entityMa
         return $this->redirectToRoute('post_show', ['id' => $post->getId()]);
     }
 
+    #[Route('/repost/{id}', name: 'post_repost')]
+    public function repost(Posts $post, EntityManagerInterface $entityManager, Security $security): Response
+    {
+        $user = $security->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException("Vous devez être connecté pour reposter.");
+        }
+
+        $repost = new Posts();
+        $repost->setUser($user);
+        $originalPost = $entityManager->getRepository(Repost::class)->find($post->getId());
+        $repost->setOriginalPost($originalPost);
+
+        $entityManager->persist($repost);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('post_list');
+    }
 }
