@@ -1,4 +1,5 @@
-{% block title %}Toutes les publications{% endblock %}
+{% block title %}Toutes les publications
+{% endblock %}
 
 {% block body %}
 	{% include 'posts/sidebar.html.twig' %}
@@ -22,21 +23,25 @@
 								<p class="font-bold text-lg text-white">
 									{{ post.user.username }}&nbsp;&nbsp;
 									<span class="text-sm text-zinc-500">{{ post.createdAt|date('d/m/Y - H:i') }}</span>
-								</p>
-							</div>
-						</div>
-
+								{% if post.originalPost %}
+									<div class="flex items-center text-green-500 italic">
+										<img src="{{ asset('img/icons/repost.png') }}" class="h-5 transition-transform mr-2" alt="Repost Icon"/>
+										<p>
+											<strong>Repost de {{ post.originalPost.username }}</strong>
+										</p>
+                    								{% endif %}
+									</div>
+                  						</div>
 						<a href="{{ path('posts_show', { id: post.id }) }}">
 							<p class="text-white ml-14">{{ post.content }}</p>
+
 							{% if post.image %}
 								<img src="{{ asset('uploads/images/' ~ post.image) }}" alt="Image de la publication" class="mt-4 rounded-lg shadow-md max-w-full">
 							{% endif %}
-						</a>
+     						</a>
 
-						<div class="flex justify-between items-center mt-5">
-							<!-- Section des actions (like, repost, comment, delete) -->
-							<div class="flex items-center text-zinc-300 space-x-6">
-								<!-- Bouton Like -->
+						<div class="flex justify-between items-center mx-32">
+							<div class="flex items-center text-zinc-300 space-x-36 mt-5">
 								<button class="like-button flex items-center" data-post-id="{{ post.id }}" data-liked="{{ post.userHasLiked }}">
 									{% if post.userHasLiked %}
 										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-red-500" fill="currentColor" viewbox="0 0 24 24">
@@ -49,13 +54,17 @@
 									{% endif %}
 									<span id="likes-count-{{ post.id }}">{{ post.likesCount }}</span>
 								</button>
-								<!-- Bouton Repost -->
-								<img src="{{ asset('img/icons/repost.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Repost Icon"/>
-								<!-- Bouton Commentaire -->
+								<a href="{{ path('post_repost', {id: post.id}) }}">
+									<img src="{{ asset('img/icons/repost.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Repost Icon"/>
+								</a>
 								<a href="{{ path('posts_show', { id: post.id }) }}">
 									<img src="{{ asset('img/icons/comment.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Comment Icon"/>
 								</a>
 							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
 
 							{% if app.user and app.user.id == post.user.id %}
 								<!-- Le bouton supprimer est maintenant dans un conteneur à droite avec un espacement minimal -->
@@ -119,6 +128,5 @@
 			});
 		});
 	</script>
-
 	{% include 'footer.html.twig' %}
 {% endblock %}

@@ -104,6 +104,4 @@ public function delete(Request $request, Users $user, EntityManagerInterface $em
     $this->addFlash('deleted', 'Votre compte a été supprimé.');
     return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
 }
-
 }
-

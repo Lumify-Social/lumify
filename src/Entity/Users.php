@@ -189,4 +189,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->posts = $posts;
     }
+
+    public function __toString(): string
+    {
+        return $this->username ?? '';
+    }
 }

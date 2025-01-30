@@ -7,18 +7,27 @@ use App\Entity\Likes;
 use App\Entity\Comments;
 use App\Form\PostType;
 use App\Form\CommentType;
+use App\Form\PostType;
+use App\Entity\Repost;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-
 class PostsController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     #[Route('/posts', name: 'posts_index')]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -182,5 +191,32 @@ class PostsController extends AbstractController
         $likesCount = $entityManager->getRepository(Likes::class)->count(['post' => $post]);
 
         return new JsonResponse(['liked' => true, 'likesCount' => $likesCount], JsonResponse::HTTP_OK);
+    }
+
+    #[Route('/repost/{id}', name: 'post_repost')]
+    public function repost(Posts $post, EntityManagerInterface $entityManager, Security $security): Response
+    {
+        $user = $security->getUser();
+    
+        if (!$user) {
+            throw $this->createAccessDeniedException("Vous devez être connecté pour reposter.");
+        }
+    
+        $repost = new Posts();
+        $repost->setUser($user);
+        $originalPost = $entityManager->getRepository(Repost::class)->find($post->getId());
+
+        if ($originalPost) {
+            $repost->setContent($originalPost->getContent());
+    
+            $repost->setOriginalPost($originalPost);
+        
+            $entityManager->persist($repost);
+            $entityManager->flush();
+        } else {
+            throw $this->createNotFoundException('Le post original est introuvable.');
+        }
+    
+        return $this->redirectToRoute('posts');
     }
 }
