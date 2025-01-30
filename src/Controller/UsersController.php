@@ -3,7 +3,6 @@ namespace App\Controller;
 
 use App\Entity\Users;
 use App\Entity\Posts;
-use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,4 +105,4 @@ public function delete(Request $request, Users $user, EntityManagerInterface $em
     $this->addFlash('deleted', 'Votre compte a été supprimé.');
     return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
 }
-
+}
