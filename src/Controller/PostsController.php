@@ -14,10 +14,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class PostsController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     #[Route('/posts', name: 'posts_index')]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -167,19 +174,26 @@ public function show(int $id, Request $request, EntityManagerInterface $entityMa
     public function repost(Posts $post, EntityManagerInterface $entityManager, Security $security): Response
     {
         $user = $security->getUser();
-
+    
         if (!$user) {
             throw $this->createAccessDeniedException("Vous devez être connecté pour reposter.");
         }
-
+    
         $repost = new Posts();
         $repost->setUser($user);
         $originalPost = $entityManager->getRepository(Repost::class)->find($post->getId());
-        $repost->setOriginalPost($originalPost);
 
-        $entityManager->persist($repost);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('post_list');
+        if ($originalPost) {
+            $repost->setContent($originalPost->getContent());
+    
+            $repost->setOriginalPost($originalPost);
+        
+            $entityManager->persist($repost);
+            $entityManager->flush();
+        } else {
+            throw $this->createNotFoundException('Le post original est introuvable.');
+        }
+    
+        return $this->redirectToRoute('posts');
     }
 }

@@ -9,21 +9,16 @@
 			{% include 'posts/trends.html.twig' %}
 			{% include 'posts/category.html.twig' %}
 
+			{% for post in posts %}
 			<div class="post">
 				{% if post.originalPost %}
 					<p>
 						<strong>Repost de
-							{{ post.originalPost.author.username }}</strong>
+							{{ post.originalPost.username }}</strong>
 					</p>
 					<p>{{ post.originalPost.content }}</p>
-				{% else %}
-					<p>{{ post.content }}</p>
 				{% endif %}
-
-				<p>Par:
-					{{ post.author.username }}</p>
-				<a href="{{ path('post_repost', {id: post.id}) }}">🔁 Repost</a>
-			</div>
+			{% endfor %}
 			<div class="rounded-3xl bg-zinc-900">
 				{% for post in posts %}
 					<div class="p-4 shadow-lg hover:shadow-2xl transition-shadow duration-300 border-b border-zinc-700 items-center">
@@ -60,7 +55,9 @@
 									{% endif %}
 									<span id="likes-count-{{ post.id }}">{{ post.likesCount }}</span>
 								</button>
+								<a href="{{ path('post_repost', {id: post.id}) }}">
 								<img src="{{ asset('img/icons/repost.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Repost Icon"/>
+								</a>
 								<a href="{{ path('posts_show', { id: post.id }) }}">
 									<img src="{{ asset('img/icons/comment.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Comment Icon"/>
 								</a>

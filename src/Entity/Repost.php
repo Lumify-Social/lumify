@@ -17,11 +17,11 @@ class Repost
     private ?string $content = null;
 
     #[ORM\ManyToOne(targetEntity: Users::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: false)]  // Spécifie "user_id" au lieu de "username_id"
     private Users $username;
 
-    #[ORM\ManyToOne(targetEntity: self::class)]
-    #[ORM\JoinColumn(nullable: true, onDelete: "CASCADE")]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'retweets')]
+    #[ORM\JoinColumn(name: 'original_post_id', referencedColumnName: 'id', nullable: true)]
     private ?Repost $originalPost = null;
 
     public function getId(): ?int
