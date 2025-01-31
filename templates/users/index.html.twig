@@ -70,8 +70,8 @@ editForm.style.display = 'none';
 
 				<!-- Bouton Modifier -->
 				<div class="mt-8 text-center">
-					<button id="edit-btn" class="py-2 px-4 bg-rose-500 text-white rounded-md hover:bg-rose-600 focus:outline-none">
-						Modifier
+					<button id="edit-btn" class="text-white bg-rose-500 hover:bg-rose-600 focus:outline-none focus:ring-4 focus:ring-yellow-900 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 transition-all">
+						Modifier vos informations
 					</button>
 				</div>
 
@@ -111,23 +111,32 @@ editForm.style.display = 'none';
 					{% else %}
 						<ul class="space-y-4 mt-4">
 							{% for post in posts %}
-								<li class="bg-zinc-700 p-4 rounded-lg shadow-md">
-									<div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700">
-										<p class="font-bold text-lg text-white">{{ post.user.username }}&nbsp;&nbsp;<span class="text-sm text-zinc-500">
-												{{ post.createdAt|date('d/m/Y - H:i') }}
-											</span>
-										</p>
-										<p class="mt-2 text-white">{{ post.content }}</p>
-										{% if post.image %}
-											<img src="{{ asset('uploads/images/' ~ post.image) }}" alt="Image de la publication" class="mt-4 rounded-lg shadow-md max-w-full">
-										{% endif %}
-									</div>
+								<li class="bg-zinc-700 rounded-2xl">
+									<div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300">
+										<div class="flex">
+											{% if post.user.profilePicture %}
+												<img src="{{ asset('uploads/profile_pictures/' ~ post.user.profilePicture) }}" alt="Photo de profil" class="w-12 h-12 rounded-full align-items-start border-2 border-zinc-700 mr-4">
+											{% else %}
+												<img src="{{ asset('img/photoprofil.jpg') }}" alt="Photo de profil par défaut" class="w-12 h-12 rounded-full border-2 border-zinc-700 mr-2">
+											{% endif %}
+											<div>
+												<p class="font-bold text-lg text-white">{{ post.user.username }}&nbsp;&nbsp;<span class="text-sm text-zinc-500">
+														{{ post.createdAt|date('d/m/Y - H:i') }}
+													</span>
+												</p>
+												<p class="mt-2 text-white">{{ post.content }}</p>
+												{% if post.image %}
+													<img src="{{ asset('uploads/images/' ~ post.image) }}" alt="Image de la publication" class="mt-4 rounded-lg shadow-md max-w-full">
+												{% endif %}
+											</div>
+										</li>
+									{% endfor %}
 								</li>
-							{% endfor %}
-						</ul>
-					{% endif %}
+							</ul>
+						{% endif %}
+					</div>
 				</div>
 			</div>
-		</div>
-	{% endblock %}
+		{% endblock %}
+	</body>
 </body>

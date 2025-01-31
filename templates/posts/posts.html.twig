@@ -28,7 +28,7 @@
 						</p>
 					</div>
 					<a href="{{ path('posts_show', { id: post.id }) }}">
-						<p class="text-white ml-14">{{ post.content }}</p>
+						<p class="text-white ml-16">{{ post.content }}</p>
 
 						{% if post.image %}
 							<img src="{{ asset('uploads/images/' ~ post.image) }}" alt="Image de la publication" class="mt-4 rounded-lg shadow-md max-w-full">
@@ -36,7 +36,7 @@
 					</a>
 
 					<div class="flex justify-between items-center mx-32">
-						<div class="flex items-center text-zinc-300 space-x-16 mt-5">
+						<div class="flex items-center text-zinc-300 space-x-36 mt-5">
 							<button class="like-button flex items-center" data-post-id="{{ post.id }}" data-liked="{{ post.userHasLiked }}">
 								{% if post.userHasLiked %}
 									<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1 text-red-500" fill="currentColor" viewbox="0 0 24 24">
@@ -53,17 +53,17 @@
 							<a href="{{ path('posts_show', { id: post.id }) }}">
 								<img src="{{ asset('img/icons/comment.png') }}" class="h-5 cursor-pointer hover:scale-110 transition-transform" alt="Comment Icon"/>
 							</a>
+						</div>
+					</div>
 							{% if app.user and app.user.id == post.user.id %}
-								<div class="flex items-center justify-end">
-									<form action="{{ path('posts_delete', { id: post.id }) }}" method="POST" onsubmit="return confirm('Êtes-vous sur de vouloir supprimer cette publication ?')">
+								<div class="flex justify-end">
+									<form action="{{ path('posts_delete', { id: post.id }) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette publication ?')">
 										<button type="submit" class="text-white bg-red-600 hover:bg-red-700 py-1 px-3 rounded-full font-bold transition-all duration-300 focus:outline-none">
 											Supprimer
 										</button>
 									</form>
 								</div>
 							{% endif %}
-						</div>
-					</div>
 				</div>
 			{% endfor %}
 		</div>
@@ -121,4 +121,4 @@ console.error('Error:', error);
 }
 });
 });
-});</script>{% include 'footer.html.twig' %}{% endblock %}
+});</script>{% endblock %}
