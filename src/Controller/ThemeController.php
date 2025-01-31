@@ -1,20 +1,22 @@
-<?php 
+<?php
 
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ThemeController extends AbstractController
 {
-    #[Route('/set-theme', name: 'set_theme', methods: ['POST'])]
-    public function setTheme(Request $request, SessionInterface $session)
+    #[Route('/switch-theme', name: 'switch_theme')]
+    public function switchTheme(Request $request): Response
     {
-        $theme = $request->request->get('theme', 'light');
-        $session->set('theme', $theme);
+        $theme = $request->getSession()->get('theme', 'light');
+        $newTheme = $theme === 'light' ? 'dark' : 'light';
+        $request->getSession()->set('theme', $newTheme);
 
-        return $this->redirectToRoute('/');
+        return $this->redirectToRoute('home');
     }
 }
+
