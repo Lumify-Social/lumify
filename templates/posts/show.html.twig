@@ -12,8 +12,9 @@
 				</a>
 			</div>
 
+<div class="rounded-t-3xl bg-zinc-900">
 			<p class="mt-2 text-zinc-300">
-				<div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-zinc-700 items-center">
+				<div class="p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 items-center">
 					<div class="flex items-center">
 						{% if post.user.profilePicture %}
 							<img src="{{ asset('uploads/profile_pictures/' ~ post.user.profilePicture) }}" alt="Photo de profil" class="w-12 h-12 rounded-full border-2 border-zinc-700 mr-4">
@@ -26,7 +27,7 @@
 							</p>
 						</div>
 					</div>
-					<p class="mt-2 ml-16 text-zinc-300">
+					<p class="mt-2 ml-16 text-white">
 						{{ post.content }}
 					</p>
 					{% if post.image %}
@@ -34,7 +35,7 @@
 					{% endif %}
 					<p class="text-sm text-zinc-500 mt-4">
 						<em>Publié le
-							{{ post.createdAt|date('d/m/Y H:i') }}
+							{{ post.createdAt|date('d/m/Y - H:i') }}
 							• Avec Lumify</em>
 					</p>
 
@@ -62,6 +63,8 @@
 							</div>
 						</div>
 					</div>
+				<hr class="border border-zinc-700 w-75">
+				</div>
 				</div>
 
 				{% if app.user %}
@@ -84,7 +87,7 @@
 				{% endif %}
 
 				{% for comment in post.comments %}
-					<div class="p-4 border border-zinc-700 max-w-2xl mx-auto" style="max-width: 39rem;">
+					<div class="p-4 bg-zinc-900 rounded-3xl max-w-2xl mx-auto mb-20" style="max-width: 39rem;">
 						<div class="flex items-center">
 							{% if comment.user.profilePicture %}
 								<img src="{{ asset('uploads/profile_pictures/' ~ comment.user.profilePicture) }}" alt="Photo de profil" class="w-9 h-9 rounded-full border-2 border-zinc-700 mr-4">

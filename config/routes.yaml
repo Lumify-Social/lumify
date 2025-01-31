@@ -1,8 +1,14 @@
 controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+  resource:
+    path: ../src/Controller/
+    namespace: App\Controller
+  type: attribute
+
 registration:
   path: /registration
   controller: App\Controller\RegistrationController::register
+
+set_theme:
+  path: /set-theme
+  controller: App\Controller\ThemeController::setTheme
+  methods: POST
