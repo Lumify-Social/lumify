@@ -2,7 +2,6 @@
 	<footer class="p-4 mt-16">
 		<hr class="border-zinc-700 mx-auto mb-16">
 		<div class="mx-auto max-w-screen-xl">
-
 			<div class="flex justify-between">
 				<div class="mb-6 sm:mb-0 hidden sm:block">
 					<a href="#" class="flex items-center">
@@ -14,12 +13,21 @@
 					<div>
 						<h2 class="mb-6 text-sm font-semibold text-white uppercase">Pages</h2>
 						<ul class="text-zinc-400">
-							<li class="mb-4">
-								<a href="/posts" class="hover:underline">Publications</a>
-							</li>
-							<li class="mb-4">
-								<a href="/users" class="hover:underline">Mon profil</a>
-							</li>
+							{% if app.user %}
+								<li class="mb-4">
+									<a href="/posts" class="hover:underline">Publications</a>
+								</li>
+								<li class="mb-4">
+									<a href="/users" class="hover:underline">Mon profil</a>
+								</li>
+							{% else %}
+								<li class="mb-4">
+									<a href="{{ path('app_login') }}" class="hover:underline">Publications</a>
+								</li>
+								<li class="mb-4">
+									<a href="{{ path('app_login') }}" class="hover:underline">Mon profil</a>
+								</li>
+							{% endif %}
 						</ul>
 					</div>
 					<div>
