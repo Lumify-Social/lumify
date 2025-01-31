@@ -80,18 +80,18 @@ editForm.style.display = 'none';
 					<form
 						method="post" action="{{ path('update_profile') }}" enctype="multipart/form-data" class="grid grid-cols-1 gap-8">
 						<!-- Bloc du nom d'utilisateur -->
-						<div class="bg-zinc-800 p-6 rounded-md shadow-md">
+						<div class="bg-zinc-800 p-6 rounded-2xl shadow-md">
 							<h2 class="text-xl font-semibold text-white">Modifier le nom d'utilisateur</h2>
 							<input type="text" name="username" value="{{ user.username }}" class="w-full p-2 mt-4 bg-zinc-700 border-2 border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500">
 						</div>
 						<!-- Bloc de la bio -->
-						<div class="bg-zinc-800 p-6 rounded-md shadow-md">
+						<div class="bg-zinc-800 p-6 rounded-2xl shadow-md">
 							<h2 class="text-xl font-semibold text-white">Modifier la bio</h2>
 							<textarea name="bio" rows="4" class="w-full p-2 mt-4 bg-zinc-700 border-2 border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Écrivez votre bio ici...">{{ user.bio ? user.bio : '' }}</textarea>
 						</div>
 
 						<!-- Bloc de la photo de profil -->
-						<div class="bg-zinc-800 p-6 rounded-md shadow-md">
+						<div class="bg-zinc-800 p-6 rounded-2xl shadow-md">
 							<h2 class="text-xl font-semibold text-white">Modifier la photo</h2>
 							<div class="mt-4">
 								<label for="profile_picture" class="block text-white">Sélectionner une nouvelle photo</label>
@@ -101,7 +101,7 @@ editForm.style.display = 'none';
 
 						<!-- Bouton pour soumettre les changements -->
 						<div class="text-center mt-6">
-							<button type="submit" class="py-2 px-4 bg-rose-500 rounded-md hover:bg-rose-600 focus:outline-none flex items-center justify-center space-x-2">
+							<button type="submit" class="py-2 px-4 bg-rose-500 rounded-full hover:bg-rose-600 focus:outline-none flex mx-auto space-x-2 transition-all">
 								<span>Mettre à jour</span>
 							</button>
 						</div>
