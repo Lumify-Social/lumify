@@ -21,18 +21,3 @@ body {
     font-family: 'Noto';
     src: url('/public/fonts/Noto-Regular.ttf');
 }
-
-a {
-    color: var(--link-color);
-  }
-  
-  .theme-toggle {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: var(--link-color);
-    color: var(--bg-color);
-    text-decoration: none;
-    border-radius: 5px;
-  }
-  
-  
