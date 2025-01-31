@@ -1,11 +1,38 @@
+:root {
+    --bg-color: #000000;
+    --text-color: #FFFFFF;
+    --link-color: #0066cc;
+  }
+  
+  .light {
+    --bg-color: #FFFFFF;
+    --text-color: #000000;
+    --link-color: #66b3ff;
+  }
+
 body {
     margin: 0;
     padding: 0;
-    background-color: #000;
-    color: #FFF;
+    background-color: #000000;
+    color: #FFFFFF;
 }
 
 @font-face {
     font-family: 'Noto';
     src: url('/public/fonts/Noto-Regular.ttf');
 }
+
+a {
+    color: var(--link-color);
+  }
+  
+  .theme-toggle {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: var(--link-color);
+    color: var(--bg-color);
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  

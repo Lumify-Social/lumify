@@ -1,50 +1,49 @@
-{% block title %}Paramètres - Lumify
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en" class="{{ current_theme() }}">
 
-{% block body %}
-	{% include 'posts/sidebar.html.twig' %}
-	<div class="text-zinc-200 min-h-screen flex justify-center">
-		<div class="py-8 px-4 mx-auto max-w-screen-xl">
-			<div class="text-center lg:mb-16 mb-8">
-				<h2 class="mb-4 text-4xl font-extrabold text-white">Paramètres</h2>
-				<div class="relative p-4 w-full max-w-lg h-full md:h-auto">
-					<div class="relative p-4 bg-white rounded-2xl shadow dark:bg-zinc-800 md:p-8">
-						<div class="mb-4 text-sm font-light text-zinc-500 dark:text-zinc-400">
-							<h3 class="mb-3 text-2xl font-bold text-white">Apparence</h3>
+	{% block title %}Paramètres - Lumify
+	{% endblock %}
 
-							<form method="POST" class="max-w-sm mx-auto">
-								<label for="background" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choisissez un fond</label>
-								<select name="background" id="background" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-									<option selected>Choisissez un fond</option>
-									<option value="{{ asset('img/themes/blue-steel.jpeg') }}">Blue Steel</option>
-									<option value="{{ asset('img/themes/gotham.jpeg') }}">Gotham</option>
-									<option value="{{ asset('img/themes/gunmetal.jpeg') }}">Gunmetal</option>
-									<option value="{{ asset('img/themes/midnight.jpeg') }}">Midnight</option>
-									<option value="{{ asset('img/themes/purple-burst.jpeg') }}">Purple Bust</option>
-									<option value="{{ asset('img/themes/space.jpeg') }}">Space</option>
-								</select>
-								<button type="submit">Appliquer</button>
-							</form>
-							<hr class="border border-zinc-700 w-75 mb-5">
-							<h3 class="mb-3 text-2xl font-bold text-white">Votre compte</h3>
-							<p class="font-semibold text-lg text-white">Votre nom d'utilisateur :
-								<span class="text-zinc-400">{{ app.user.username }}</span>
-							</p>
-							<p class="font-semibold text-lg text-white mb-5">Votre adresse e-mail :
-								<span class="text-zinc-400">{{ app.user.email }}</span>
-							</p>
-							<a href="/users" type="button" class="text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-900 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2">Modifier vos informations</a>
-							<form action="{{ path('user_delete', {id: app.user.id}) }}" method="POST">
-								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.id) }}">
+	{% block body %}
+		{% include 'posts/sidebar.html.twig' %}
+		<div class="text-zinc-200 min-h-screen flex justify-center">
+			<div class="py-8 px-4 mx-auto max-w-screen-xl">
+				<div class="text-center lg:mb-16 mb-8">
+					<h2 class="mb-4 text-4xl font-extrabold text-white">Paramètres</h2>
+					<div class="relative p-4 w-full max-w-lg h-full md:h-auto">
+						<div class="relative p-4 bg-white rounded-2xl shadow dark:bg-zinc-800 md:p-8">
+							<div class="mb-4 text-sm font-light text-zinc-500 dark:text-zinc-400">
+								<h3 class="mb-3 text-2xl font-bold text-white">Apparence</h3>
 
-								<button type="submit" name="user_delete" value="<?=$row['id'];?>" class="text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-900 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mt-5 mb-2">Supprimer votre compte et vos données</button>
-							</form>
+								<a href="{{ path('switch_theme') }}" class="theme-toggle mb-5">
+									{% set theme = current_theme() %}
+									{% if theme == 'dark' %}
+										Passer au mode clair
+									{% elseif theme == 'light' %}
+										Passer au mode clair
+									{% else %}
+										Passer au mode sombre
+									{% endif %}
+								</a>
+								<hr class="border border-zinc-700 w-75 mb-5">
+								<h3 class="mb-3 text-2xl font-bold text-white">Votre compte</h3>
+								<p class="font-semibold text-lg text-white">Votre nom d'utilisateur :
+									<span class="text-zinc-400">{{ app.user.username }}</span>
+								</p>
+								<p class="font-semibold text-lg text-white mb-5">Votre adresse e-mail :
+									<span class="text-zinc-400">{{ app.user.email }}</span>
+								</p>
+								<a href="/users" type="button" class="text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-900 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2">Modifier vos informations</a>
+								<form action="{{ path('user_delete', {id: app.user.id}) }}" method="POST">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.id) }}">
+
+									<button type="submit" name="user_delete" value="<?=$row['id'];?>" class="text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-900 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mt-5 mb-2">Supprimer votre compte et vos données</button>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-	</div>
-</div>
-{% endblock %}
+	</html>
+</div>{% endblock %}</html>

@@ -79,6 +79,11 @@ editForm.style.display = 'none';
 				<div id="edit-form" class="mt-8">
 					<form
 						method="post" action="{{ path('update_profile') }}" enctype="multipart/form-data" class="grid grid-cols-1 gap-8">
+						<!-- Bloc du nom d'utilisateur -->
+						<div class="bg-zinc-800 p-6 rounded-md shadow-md">
+							<h2 class="text-xl font-semibold text-white">Modifier le nom d'utilisateur</h2>
+							<input type="text" name="username" value="{{ user.username }}" class="w-full p-2 mt-4 bg-zinc-700 border-2 border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500">
+						</div>
 						<!-- Bloc de la bio -->
 						<div class="bg-zinc-800 p-6 rounded-md shadow-md">
 							<h2 class="text-xl font-semibold text-white">Modifier la bio</h2>
@@ -92,11 +97,6 @@ editForm.style.display = 'none';
 								<label for="profile_picture" class="block text-white">Sélectionner une nouvelle photo</label>
 								<input type="file" name="profile_picture" id="profile_picture" class="mt-2 p-2 bg-zinc-700 border-2 border-zinc-600 rounded-md">
 							</div>
-						</div>
-						<!-- Bloc du nom d'utilisateur -->
-						<div class="bg-zinc-800 p-6 rounded-md shadow-md">
-							<h2 class="text-xl font-semibold text-white">Modifier le nom d'utilisateur</h2>
-							<input type="text" name="username" value="{{ user.username }}" class="w-full p-2 mt-4 bg-zinc-700 border-2 border-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500">
 						</div>
 
 						<!-- Bouton pour soumettre les changements -->

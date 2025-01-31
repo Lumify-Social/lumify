@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="{{ current_theme() }}">
 	<head>
 		<title>
 			{% block title %}Welcome!
@@ -9,6 +9,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="icon" type="image/png" href="{{ asset(logo) }}">
 		<script src="https://cdn.tailwindcss.com"></script>
+
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+        {% endblock %}
 
 		{% block javascripts %}
 			{{ importmap('app') }}
@@ -32,7 +36,7 @@
 							<a href="/" class="block py-2 px-3 text-white text-rose-500 md:p-0 transition-all" aria-current="page">Accueil</a>
 						</li>
 						<li>
-								<a href="/posts" class="block py-2 px-3 hover:text-rose-500 md:p-0 text-white transition-all">Publications</a>		
+							<a href="/posts" class="block py-2 px-3 hover:text-rose-500 md:p-0 text-white transition-all">Publications</a>
 						</li>
 						<li>
 							{% if app.user %}

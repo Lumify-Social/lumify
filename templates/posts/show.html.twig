@@ -87,7 +87,7 @@
 				{% endif %}
 
 				{% for comment in post.comments %}
-					<div class="p-4 bg-zinc-900 rounded-3xl max-w-2xl mx-auto mb-20" style="max-width: 39rem;">
+					<div class="p-4 bg-zinc-900 rounded-3xl max-w-2xl mx-auto mb-5" style="max-width: 39rem;">
 						<div class="flex items-center">
 							{% if comment.user.profilePicture %}
 								<img src="{{ asset('uploads/profile_pictures/' ~ comment.user.profilePicture) }}" alt="Photo de profil" class="w-9 h-9 rounded-full border-2 border-zinc-700 mr-4">
